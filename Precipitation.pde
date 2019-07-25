@@ -1,52 +1,3 @@
-class Thunderstorm implements WeatherCondition { 
-  final APrecipitation precipitation;
-  boolean flash = false;
-  boolean isDec = false;
-  boolean stutter = true;
-  int count = 0;
-  int add = 3;
-  int max = 80;
-
-  Thunderstorm(APrecipitation precipitation) {
-    this.precipitation = precipitation;
-  }
-
-  void draw() {
-    this.precipitation.draw();
-    if (frameCount % 30 == 0) {
-      flash = true;
-    }
-    if (flash) {
-      drawFlash();
-    }
-  }
-
-  void drawFlash() {
-    fill(255, map(count, 0, 30, 0, 100));
-    rect(0, 0, width, height);
-    if (count > max) {
-      isDec = true;
-    } else if (count < 25 && isDec && stutter) {
-      isDec = false;
-      stutter = false;
-      max = 160;
-    } else if (count < 0) {
-      isDec = false;
-      add = 3;
-      max = 60;
-      stutter = true;
-      flash = false;
-    }
-    if (isDec) {
-      count -= add;
-      add -= 3;
-    } else {
-      count += add;
-      add+=3;
-    }
-  }
-}
-
 // to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
@@ -165,7 +116,7 @@ abstract class ADrop implements Drop {
 class RainDrop extends ADrop implements Drop {
 
   RainDrop() {
-    super(new PVector(0, random(3, 5)), new PVector(0, random(2, 5)), new PVector(random(width), 0), color(160, 236, 255));
+    super(new PVector(0, random(3, 5)), new PVector(0, random(2, 5)), new PVector(random(width), 0), color(random(190, 205), 222, 239));
   }
 }
 
@@ -174,7 +125,7 @@ class SnowDrop extends ADrop implements Drop {
   final float[] bounds = new float[2];
 
   SnowDrop() {
-    super( new PVector(0, random(3, 7)), new PVector(0.3, random(2, 5)), new PVector(random(width), 0), color(160, 236, 255));
+    super( new PVector(0, random(1, 2)), new PVector(0.3, random(2, 3)), new PVector(random(width), 0), color(random(210, 230), 227, 229));
     bounds[0] = pos.x - 1;
     bounds[1] = pos.x + 1;
   }
