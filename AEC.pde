@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import org.aec.facade.*;
 

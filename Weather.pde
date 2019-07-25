@@ -36,3 +36,7 @@ public class Weather {
  "name":"London",
  "cod":200}
  */
+ 
+interface WeatherCondition {
+  void draw();
+}
