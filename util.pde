@@ -11,8 +11,8 @@ void setGradient(int x, int y, float w, float h, int axis, color ... colors) {
 
   if (axis == Y_AXIS) {  // Top to bottom gradient
     for (int j = 0; j + 1 < colors.length; j++) {
-      for (int i = y + (int)(j*h/2); i <= y + (j+1)*h/2; i++) {
-        float inter = map(i, y, (y+h)/2, 0, 1);
+      for (float i = y + (j*h)/2; i <= y + (j+1)*h/2; i++) {
+        float inter = map(i, y + (j*h)/2, y + (j+1)*h/2, 0, 1);
         color c = lerpColor(colors[j], colors[j+1], inter);
         stroke(c);
         line(x, i, x+w, i);
@@ -20,11 +20,11 @@ void setGradient(int x, int y, float w, float h, int axis, color ... colors) {
     }
   } else if (axis == X_AXIS) {  // Left to right gradient
     for (int j = 0; j + 1 < colors.length; j++) {
-      for (int i = x + (int)(j*w/2); i <= (j+1)*w/2; i++) {
-        float inter = map(i, x, x+w, 0, 1);
+      for (float i = x + (j*w/2); i <= x+(j+1)*w/2; i++) {
+        float inter = map(i, x + (j*w/2), x+(j+1)*w/2, 0, 1);
         color c = lerpColor(colors[j], colors[j+1], inter);
         stroke(c);
-        line(i, x, i, x+w);
+        line(i, y, i, y+h);
       }
     }
   }

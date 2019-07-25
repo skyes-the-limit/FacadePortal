@@ -5,7 +5,7 @@ public class Weather {
   final String country;
   final double latitude;
   String mainWeather;  // Rain, Snow, Extreme, etc.
-  final int windSpeed;       // meter/sec
+  int windSpeed;       // meter/sec
   final long sunrise;        // seconds UTC
   final long sunset;         // seconds UTC
   final long dt;             // seconds UTC
@@ -14,7 +14,7 @@ public class Weather {
 
   Weather(JSONObject json) {
     println(json.toString());
-    
+
     this.city = json.getString("name");
     this.country = json.getJSONObject("sys").getString("country");
     this.latitude = json.getJSONObject("coord").getDouble("lat");
@@ -42,7 +42,7 @@ public class Weather {
  "name":"London",
  "cod":200}
  */
- 
+
 interface WeatherCondition {
   void draw();
 }
