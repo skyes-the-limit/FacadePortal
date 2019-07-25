@@ -37,7 +37,8 @@ void draw() {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
-    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
+    color c3 = color(225, 40, 10);
+    setGradient(0, 0, width, height / 11, c1, c2, c3, Y_AXIS);
   }
   else if (now < weather.sunrise || now > weather.sunset) {
     // DAY
@@ -46,7 +47,7 @@ void draw() {
     // NIGHT
     background(8, 23, 66);
   }
-  
+
   description = weather.city + " " /*+ convertTime(weather.dt + weather.tz) + " "*/ + weather.mainWeather;
 
   // cases for main weather: https://openweathermap.org/weather-conditions
@@ -135,18 +136,18 @@ void displayText(int x, int y) {
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
   textSize(FONT_SIZE);
-  
+
   println(weather.mainWeather);
 
   description = weather.city + "  " + convertTime(weather.dt + weather.tz) + "  " + weather.mainWeather;
-  
+
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
       text(description.charAt(i), (float) i*3, 0);
     }
   }
-  
+
   popMatrix();
 }
 
