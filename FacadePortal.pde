@@ -14,7 +14,6 @@ private static final float FONT_SCALE_Y = 2.67;
 Weather weather;
 
 void setup() {
-  println(API_KEY);
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
