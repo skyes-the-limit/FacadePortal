@@ -21,31 +21,31 @@ abstract class AirQuality implements WeatherCondition {
 
 class Mist extends AirQuality {
   Mist() {
-    super();
+    super(0.5, #FFFFFF, false);
   }
 }
 
 class Fog extends AirQuality {
   Fog() {
-    super();
+    super(1, #FFFFFF, false);
   }
 }
 
 class Smoke extends AirQuality {
   Smoke() {
-    super();
+    super(1, #, false);
   }
 }
 
 class Haze extends AirQuality {
   Haze() {
-    super();
+    super(0.7, #, false);
   }
 }
 
 class Dust extends AirQuality {
   Dust() {
-    super();
+    super(0.7, # );
   }
 }
 
