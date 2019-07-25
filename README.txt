@@ -1,0 +1,1 @@
+Must obtain an API key from https://openweathermap.org/api for "current weather data" loaded as a system environment variable named "OPEN_WEATHER_MAP" in order to run.
