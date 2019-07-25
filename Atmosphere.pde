@@ -1,3 +1,6 @@
+import java.util.Random;
+int pixelSize = 1;
+
 abstract class Atmosphere implements WeatherCondition {
   float severity;
   color c;
@@ -11,14 +14,15 @@ abstract class Atmosphere implements WeatherCondition {
   
   void draw() {
     if(particles) {
-      loadPixels();
-       for (int h = 0; h < height; h++) {
-         for (int w = 0; w < width; w++) {
-           float alpha = severity * noise(w, h);
-           pixels[(h * height) + w] = color(c, alpha);
+      //loadPixels();
+       for (int h = 0; h < height; h += pixelSize) {
+         for (int w = 0; w < width; w += pixelSize) {
+           int alpha = (int) (255 * (severity * new Random().nextFloat()));
+           fill(c, alpha);
+           rect(w,h,pixelSize,pixelSize);
          }
        }
-       updatePixels();
+       //updatePixels();
     } else {
       
     }
@@ -45,7 +49,7 @@ class Smoke extends Atmosphere {
 
 class Haze extends Atmosphere {
   Haze() {
-    super(0.7, #C69F4F, true);
+    super(0.7, #A38954, true);
   }
 }
 
