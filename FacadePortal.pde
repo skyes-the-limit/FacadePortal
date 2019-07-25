@@ -1,7 +1,7 @@
 import java.time.*;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 100;
 AEC aec;
@@ -12,7 +12,6 @@ static final float FONT_OFFSET_Y = 0.12;
 static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
-String city = "Boston";
 Weather weather;
 Clear clear;
 Clouds clouds;
@@ -33,13 +32,18 @@ Wind wind;
 
 String description;
 
-ArrayList<String> cities = new ArrayList();
+int city = 38;
 
+String[] cities = new String[]{"London","Paris","Tokyo","Beijing","Seattle","Rio de Janeiro","Geneva",
+"Boston","Sydney","Buenos Aires","Helsinki","Barcelona","Toronto","Mexico City","Dubai","Moscow","Istanbul",
+"Mumbai","New Delhi","Kathmandu","Bangkok","Santiago","Lima","Panama City","Reykjavik", "Athens","Marrakesh",
+"Cape Town","Tel Aviv","Cairo","Nairobi","Seoul","Shanghai","Lagos","Anchorage","Hong Kong","Jakarta", "Auckland", "Dallas"};
+  
 void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
-  JSONObject json = loadJSONObject(BASE_API_URL + city + "&APPID=" + API_KEY);
+  JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
   clear = new Clear();
@@ -62,15 +66,6 @@ void setup() {
   aec = new AEC();
   aec.init();
   description = "";
-
-
-  cities.add("London");
-  cities.add("New York");
-  cities.add("Paris");
-  cities.add("Tokyo");
-  cities.add("Beijing");
-  cities.add("Seattle");
-  cities.add("Rio de Janiero");
 }
 
 void draw() {
@@ -156,8 +151,21 @@ void draw() {
 
   fill(255, 255, 255);
 
-  // determines the speed (number of frames between text movements)
   float frameInterval = 2;
+  // determines the speed (number of frames between text movements)
+  switch(weather.mainWeather) {
+    case "Mist":
+    case "Smoke":
+    case "Haze":
+    case "Dust":
+    case "Fog":
+    case "Sand":
+    case "Ash":
+      frameInterval = 0.5;
+      break;
+    default:
+      //
+  }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
   int minPos = -220;
@@ -167,13 +175,26 @@ void draw() {
   // vertical grid pos
   int yPos = 15;
 
-  displayText(max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval)), yPos);
+  int xPos = max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval));
+  displayText(xPos, yPos);
 
   aec.endDraw();
   aec.drawSides();
+  
+  if (xPos <= minPos + 10) {
+    city++;
+    if (city >= cities.length) {
+      city = 0;
+    }
+    setup();
+    frameCount = 0;
+  }
 }
 
 void displayText(int x, int y) {
+  noStroke();
+  fill(255);
+  
   // push & translate to the text origin
   pushMatrix();
   translate(x, y + FONT_OFFSET_Y);
@@ -193,7 +214,7 @@ void displayText(int x, int y) {
       text(description.charAt(i), (float) i*3, 0);
     }
   }
-
+  
   popMatrix();
 }
 
