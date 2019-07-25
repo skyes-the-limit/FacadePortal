@@ -1,4 +1,6 @@
 import java.time.*;
+import java.util.Collections;
+import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
@@ -32,14 +34,19 @@ Wind wind;
 
 String description;
 
-int city = 38;
+int city = 0;
 
-String[] cities = new String[]{"London","Paris","Tokyo","Beijing","Seattle","Rio de Janeiro","Geneva",
-"Boston","Sydney","Buenos Aires","Helsinki","Barcelona","Toronto","Mexico City","Dubai","Moscow","Istanbul",
-"Mumbai","New Delhi","Kathmandu","Bangkok","Santiago","Lima","Panama City","Reykjavik", "Athens","Marrakesh",
-"Cape Town","Tel Aviv","Cairo","Nairobi","Seoul","Shanghai","Lagos","Anchorage","Hong Kong","Jakarta", "Auckland", "Dallas"};
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+  "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
+
+boolean start = true;
 
 void setup() {
+  if (start) {
+    Collections.shuffle(Arrays.asList(cities));
+  }
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
@@ -66,6 +73,7 @@ void setup() {
   aec = new AEC();
   aec.init();
   description = "";
+  start = false;
 }
 
 void draw() {
@@ -78,8 +86,7 @@ void draw() {
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
     setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
-  }
-  else if (now < weather.sunrise || now > weather.sunset) {
+  } else if (now < weather.sunrise || now > weather.sunset) {
     // NIGHT
     background(8, 23, 66);
   } else if (now > weather.sunrise && now < weather.sunset) {
@@ -91,54 +98,54 @@ void draw() {
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
-    case "Clear":
-      clear.draw();
-      break;
-    case "Clouds":
-      clouds.draw();
-      break;
-    case "Drizzle":
-      drizzle.draw();
-      break;
-    case "Rain":
-      rain.draw();
-      break;
-    case "Thunderstorm":
-      thunderstorm.draw();
-      break;
-    case "Snow":
-      snow.draw();
-      break;
-    case "Mist":
-      mist.draw();
-      break;
-    case "Smoke":
-      smoke.draw();
-      break;
-    case "Haze":
-      haze.draw();
-      break;
-    case "Dust":
-      dust.draw();
-      break;
-    case "Fog":
-      fog.draw();
-      break;
-    case "Sand":
-      sand.draw();
-      break;
-    case "Ash":
-      ash.draw();
-      break;
-    case "Squall":
-      squall.draw();
-      break;
-    case "Tornado":
-      tornado.draw();
-      break;
-    default:
-      println("WARN: hit default on main weather switch!");
-      break;
+  case "Clear":
+    clear.draw();
+    break;
+  case "Clouds":
+    clouds.draw();
+    break;
+  case "Drizzle":
+    drizzle.draw();
+    break;
+  case "Rain":
+    rain.draw();
+    break;
+  case "Thunderstorm":
+    thunderstorm.draw();
+    break;
+  case "Snow":
+    snow.draw();
+    break;
+  case "Mist":
+    mist.draw();
+    break;
+  case "Smoke":
+    smoke.draw();
+    break;
+  case "Haze":
+    haze.draw();
+    break;
+  case "Dust":
+    dust.draw();
+    break;
+  case "Fog":
+    fog.draw();
+    break;
+  case "Sand":
+    sand.draw();
+    break;
+  case "Ash":
+    ash.draw();
+    break;
+  case "Squall":
+    squall.draw();
+    break;
+  case "Tornado":
+    tornado.draw();
+    break;
+  default:
+    println("WARN: hit default on main weather switch!");
+    break;
   }
 
   wind.draw();
@@ -150,17 +157,17 @@ void draw() {
   float frameInterval = 2;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
-    case "Mist":
-    case "Smoke":
-    case "Haze":
-    case "Dust":
-    case "Fog":
-    case "Sand":
-    case "Ash":
-      frameInterval = 0.5;
-      break;
-    default:
-      //
+  case "Mist":
+  case "Smoke":
+  case "Haze":
+  case "Dust":
+  case "Fog":
+  case "Sand":
+  case "Ash":
+    frameInterval = 0.5;
+    break;
+  default:
+    //
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
