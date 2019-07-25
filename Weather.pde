@@ -8,6 +8,8 @@ public class Weather {
   final int windSpeed;       // meter/sec
   final long sunrise;        // seconds UTC
   final long sunset;         // seconds UTC
+  final long dt;             // seconds UTC
+  final long tz;       // shift in seconds from UTC
 
   Weather(JSONObject json) {
     println(json.toString());
@@ -19,6 +21,8 @@ public class Weather {
     this.windSpeed = json.getJSONObject("wind").getInt("speed");
     this.sunrise = json.getJSONObject("sys").getLong("sunrise");
     this.sunset = json.getJSONObject("sys").getLong("sunset");
+    this.dt = json.getLong("dt");
+    this.tz = json.getLong("timezone");
   }
 }
 

@@ -1,3 +1,7 @@
+import java.util.Date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+
 int Y_AXIS = 1;
 int X_AXIS = 2;
 
@@ -21,4 +25,10 @@ void setGradient(int x, int y, float w, float h, color c1, color c2, int axis ) 
       line(i, y, i, y+h);
     }
   }
+}
+
+String convertTime(long time){
+    Date date = new Date(time);
+    Format format = new SimpleDateFormat("HH:mm");
+    return format.format(date);
 }

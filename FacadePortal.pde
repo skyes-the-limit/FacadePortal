@@ -1,7 +1,7 @@
 import java.time.*;
 
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-private static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";
+private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 private static final int WIND_THRESHOLD = 30;
 private static final int SUN_THRESHOLD = 300;
 AEC aec;
@@ -21,11 +21,12 @@ void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
-  JSONObject json = loadJSONObject(BASE_API_URL + "London" + "&APPID=" + API_KEY);
+  JSONObject json = loadJSONObject(BASE_API_URL + "Seattle" + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
   aec = new AEC();
   aec.init();
+  description = "";
 }
 
 void draw() {
@@ -46,9 +47,7 @@ void draw() {
     background(8, 23, 66);
   }
   
-  weather.mainWeather = "Smoke";
-  
-  description = weather.city + "/t";
+  description = weather.city + " " /*+ convertTime(weather.dt + weather.tz) + " "*/ + weather.mainWeather;
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
@@ -102,26 +101,26 @@ void draw() {
       break;
   }
 
-  //if (weather.windSpeed > WIND_THRESHOLD) {
-  //  new Wind(weather.windSpeed).draw();
-  //}
+  if (weather.windSpeed > WIND_THRESHOLD) {
+    new Wind(weather.windSpeed).draw();
+  }
 
   noStroke();
 
   fill(255, 255, 255);
 
   // determines the speed (number of frames between text movements)
-  int frameInterval = 3;
+  float frameInterval = 2;
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
-  int minPos = -150;
+  int minPos = -200;
   int maxPos = 50;
-  int loopFrames = (maxPos - minPos) * frameInterval;
+  int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
 
   // vertical grid pos
   int yPos = 15;
 
-  displayText(max(minPos, maxPos - (frameCount % loopFrames) / frameInterval), yPos);
+  displayText(max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval)), yPos);
 
   aec.endDraw();
   aec.drawSides();
@@ -136,13 +135,18 @@ void displayText(int x, int y) {
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
   textSize(FONT_SIZE);
+  
+  println(weather.mainWeather);
 
+  description = weather.city + "  " + convertTime(weather.dt + weather.tz) + "  " + weather.mainWeather;
+  
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
-  for (int i = 0; i < weather.city.length(); i++)
-  {
-    text(description.charAt(i), (float)i*3, 0);
+  for (int i = 0; i < description.length(); i++) {
+    if (i < description.length()) {
+      text(description.charAt(i), (float) i*3, 0);
+    }
   }
-
+  
   popMatrix();
 }
 
