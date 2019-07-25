@@ -12,7 +12,7 @@ static final float FONT_OFFSET_Y = 0.12;
 static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
-String city = "Boston";
+String city = "Minsk";
 Weather weather;
 Clear clear;
 Clouds clouds;
@@ -67,7 +67,8 @@ void draw() {
   aec.beginDraw();
 
   weather.windSpeed = 50;
-
+  
+  colorMode(RGB);
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
