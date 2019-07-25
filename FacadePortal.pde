@@ -1,11 +1,12 @@
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
-static final int SUN_THRESHOLD = 100;
+static final int SUN_THRESHOLD = 300;
 AEC aec;
 PFont font;
 
@@ -57,8 +58,6 @@ void setup() {
   font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
-  
-  weather.mainWeather = "Clouds";
 
   clear = new Clear();
   clouds = new Clouds(10);
@@ -101,11 +100,12 @@ void draw() {
     setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
-    color c1 = color(114, 173, 214);
-    color c2 = color(227, 121, 59);
-    color c3 = color(245, 30, 38);
+    color c1 = color(34, 1, 78);
+    color c2 = color(105, 5, 91);
+    color c3 = color(142, 12, 19);
+    color c4 = color(182, 75, 1);
     cloudColor = #FFFFFF;
-    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+    setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
@@ -240,7 +240,11 @@ void displayText(int x, int y) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  description = weather.city + " " + convertTime(weather.dt + weather.tz) + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
+  ZoneOffset zone = ZoneOffset.ofTotalSeconds(weather.tz);
+  OffsetTime time = OffsetTime.now(zone);
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+  String timeStr = time.format(formatter);
+  description = weather.city + " " + timeStr + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
