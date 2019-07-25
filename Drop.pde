@@ -1,10 +1,16 @@
 // to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
+  int density;
+
+  APrecipitation(int dens) {
+    drops = new ArrayList<Drop>();
+    density = dens;
+  }
 
   // generates some number of drops (of the right type) to be drawn
   void genDrops() {
-    int genNum = (int)random(1, 6);
+    int genNum = (int)random(max(1, density / 2), density);
     for (int i = 0; i < genNum; i++) {
       this.drops.add(new RainDrop());
     }
@@ -33,24 +39,26 @@ abstract class APrecipitation implements WeatherCondition {
 }
 
 class Rain extends APrecipitation {
-  void draw() {
-    
+
+  Rain() {
+    super(6);
   }
 }
 
 class Drizzle extends APrecipitation {
-  void draw() {
-    
+
+  Drizzle() {
+    super(3);
   }
 }
 
 class Thunderstorm implements WeatherCondition { 
   APrecipitation precipitation;
-  
+
   Thunderstorm(APrecipitation precipitation) {
     this.precipitation = precipitation;
   }
-  
+
   void draw() {
     this.precipitation.draw();
     // TODO
@@ -58,6 +66,10 @@ class Thunderstorm implements WeatherCondition {
 }
 
 class Snow extends APrecipitation {
+
+  Snow() {
+    super(5);
+  }
 
   @Override
     void genDrops() {
@@ -117,15 +129,25 @@ abstract class ADrop implements Drop {
 class RainDrop extends ADrop {
 
   RainDrop() {
-    super(color(random(168, 200), 100, 100), new PVector(0, random(1, 7)), new PVector(0, random(1, 5)), new PVector(random(width), 0));
+    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 7)), new PVector(0, random(1, 5)), new PVector(random(width), 0));
   }
 }
 
 // to represent a snowflake
 class SnowDrop extends ADrop {
-  int[] bounds = new int[2];
+  final float[] bounds = new float[2];
 
   SnowDrop() {
-    super(color(random(168, 200), 100, 100), new PVector(0, random(1, 7)), new PVector(0, random(1, 5)), new PVector(random(width), 0));
+    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 7)), new PVector(0.3, random(1, 5)), new PVector(random(width), 0));
+    bounds[0] = pos.x - 1;
+    bounds[1] = pos.x + 1;
+  }
+
+
+  void update() {
+    super.update();
+    if (pos.x > bounds[1] || pos.x < bounds[0]) {
+      vel.x *= -1;
+    }
   }
 }
