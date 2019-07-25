@@ -57,8 +57,6 @@ void setup() {
   font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
-  
-  weather.mainWeather = "Clouds";
 
   clear = new Clear();
   clouds = new Clouds(10);
@@ -95,10 +93,11 @@ void draw() {
     setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
-    color c1 = color(114, 173, 214);
-    color c2 = color(227, 121, 59);
-    color c3 = color(245, 30, 38);
-    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+    color c1 = color(34, 1, 78);
+    color c2 = color(105, 5, 91);
+    color c3 = color(142, 12, 19);
+    color c4 = color(182, 75, 1);
+    setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
