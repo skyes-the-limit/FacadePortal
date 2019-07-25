@@ -46,7 +46,7 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 boolean start = true;
 
 void setup() {
-  for (int i = 0; i <= 500; i++) {
+  for (int i = 0; i <= 300; i++) {
     stars.add(new PVector(random(width*0.4), random(height / 12)));
   }
   if (start) {
@@ -111,8 +111,8 @@ void draw() {
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
     color c1 = color(114, 173, 214);
-    color c2 = color(137, 171, 215);
-    color c3 = color(152, 181, 220);
+    color c2 = color(177, 211, 245);
+    color c3 = color(202, 231, 255);
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     println("WARN: hit last else on sky fill!");
