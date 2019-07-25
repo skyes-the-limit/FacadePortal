@@ -1,3 +1,5 @@
+import java.time.*;
+
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 private static final int WIND_THRESHOLD = 30;
@@ -24,7 +26,16 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
-  background(0, 0, 0);
+  
+  Instant now = Instant.now();
+  Instant sunrise = Instant.ofEpochSecond(weather.sunrise);
+  Instant sunset = Instant.ofEpochSecond(weather.sunset);
+  
+  if (now.isBefore(sunrise) || now.isAfter(sunset)) {
+    background(8, 23, 66);
+  } else if (now.isAfter(sunrise) && now.isBefore(sunset)) {
+    background(128, 189, 232);
+  }
   
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
