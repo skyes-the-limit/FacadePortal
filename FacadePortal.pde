@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 100;
 AEC aec;
@@ -32,6 +32,8 @@ Squall squall;
 Tornado tornado;
 Wind wind;
 
+ArrayList<PVector> stars = new ArrayList<PVector>();
+
 String description;
 
 int city = 0;
@@ -44,6 +46,9 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 boolean start = true;
 
 void setup() {
+  for (int i = 0; i <= 500; i++) {
+    stars.add(new PVector(random(width*0.4), random(height / 12)));
+  }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
@@ -86,13 +91,18 @@ void draw() {
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
     color c3 = color(245, 30, 38);
-    setGradient(0, 0, width, height / 11,Y_AXIS, c1, c2, c3 );
+    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
     color c2 = color(36, 23, 81);
     color c3 = color(20, 36, 107);
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    for (PVector star : stars) {
+      noStroke();
+      fill(255, 190);
+      rect(star.x, star.y, 0.7, 1);
+    }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
     color c1 = color(114, 173, 214);
@@ -100,6 +110,7 @@ void draw() {
     color c3 = color(152, 181, 220);
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
+    println("WARN: hit last else on sky fill!");
     background(0);
   }
 
