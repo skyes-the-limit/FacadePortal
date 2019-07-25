@@ -33,6 +33,8 @@ Squall squall;
 Tornado tornado;
 Wind wind;
 
+ArrayList<PVector> stars = new ArrayList<PVector>();
+
 String description;
 
 int city = 0;
@@ -45,6 +47,9 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 boolean start = true;
 
 void setup() {
+  for (int i = 0; i <= 300; i++) {
+    stars.add(new PVector(random(width*0.4), random(height / 12)));
+  }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
@@ -53,11 +58,9 @@ void setup() {
   font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
-  println(weather.tz);
-  println(Instant.now().getEpochSecond());
 
   clear = new Clear();
-  clouds = new Clouds();
+  clouds = new Clouds(10);
   drizzle = new Drizzle();
   rain = new Rain();
   thunderstorm = new Thunderstorm(rain);
@@ -82,28 +85,38 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
-  if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
-    // SUNSET OR SUNRISE
+  if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
     color c3 = color(245, 30, 38);
-    setGradient(0, 0, width, height / 11,Y_AXIS, c1, c2, c3 );
+    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
+    // SUNSET
+    color c1 = color(114, 173, 214);
+    color c2 = color(227, 121, 59);
+    color c3 = color(245, 30, 38);
+    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
     color c2 = color(36, 23, 81);
     color c3 = color(20, 36, 107);
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    for (PVector star : stars) {
+      noStroke();
+      fill(255, 190);
+      rect(star.x, star.y, 0.7, 1);
+    }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
     color c1 = color(114, 173, 214);
-    color c2 = color(137, 171, 215);
-    color c3 = color(152, 181, 220);
+    color c2 = color(177, 211, 245);
+    color c3 = color(202, 231, 255);
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
+    println("WARN: hit last else on sky fill!");
     background(0);
   }
 
@@ -113,7 +126,7 @@ void draw() {
     clear.draw();
     break;
   case "Clouds":
-    clouds.draw();
+    clouds.draw(color(#DFDFDF, 100));
     break;
   case "Drizzle":
     drizzle.draw();
@@ -160,7 +173,6 @@ void draw() {
   }
 
   wind.draw();
-
 
   noStroke();
 
@@ -220,7 +232,7 @@ void displayText(int x, int y) {
   ZoneOffset zone = ZoneOffset.ofTotalSeconds(weather.tz);
   OffsetTime time = OffsetTime.now(zone);
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-  String timeStr = time.format(formatter); 
+  String timeStr = time.format(formatter);
   description = weather.city + " " + timeStr + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
