@@ -13,7 +13,7 @@ class Thunderstorm implements WeatherCondition {
 
 // to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
-  ArrayList<Drop> drops;
+
   int density;
 
   APrecipitation(int dens) {
@@ -73,7 +73,7 @@ class Snow extends APrecipitation {
 
   @Override
     void genDrops() {
-    int genNum = (int)random(1, 6);
+    int genNum = (int)random(max(1, density / 2), this.density);
     for (int i = 0; i < genNum; i++) {
       this.drops.add(new SnowDrop());
     }
@@ -100,7 +100,7 @@ abstract class ADrop implements Drop {
   PVector vel;
   PVector pos;
 
-  ADrop(color col, PVector acc, PVector vel, PVector pos) {
+  ADrop(PVector acc, PVector vel, PVector pos, color col) {
     colorMode(HSB, 360, 100, 100);
     this.col = col;
     this.acc = acc;
@@ -130,7 +130,7 @@ abstract class ADrop implements Drop {
 class RainDrop extends ADrop implements Drop {
 
   RainDrop() {
-    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 5)), new PVector(0, random(1, 2)), new PVector(random(width), 0));
+    super(new PVector(0, random(3, 5)), new PVector(0, random(1, 2)), new PVector(random(width), 0), color(random(168, 200), 100, 100));
   }
 }
 
@@ -139,7 +139,7 @@ class SnowDrop extends ADrop implements Drop {
   final float[] bounds = new float[2];
 
   SnowDrop() {
-    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 7)), new PVector(0.3, random(1, 5)), new PVector(random(width), 0));
+    super( new PVector(0, random(3, 7)), new PVector(0.3, random(1, 5)), new PVector(random(width), 0), color(random(168, 200), 100, 100));
     bounds[0] = pos.x - 1;
     bounds[1] = pos.x + 1;
   }

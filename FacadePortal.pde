@@ -21,7 +21,7 @@ void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
-  JSONObject json = loadJSONObject(BASE_API_URL + "Seattle" + "&APPID=" + API_KEY);
+  JSONObject json = loadJSONObject(BASE_API_URL + "Minsk " + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
   aec = new AEC();
