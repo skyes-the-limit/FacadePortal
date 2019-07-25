@@ -1,11 +1,12 @@
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
-static final int SUN_THRESHOLD = 100;
+static final int SUN_THRESHOLD = 300;
 AEC aec;
 PFont font;
 
@@ -52,6 +53,8 @@ void setup() {
   font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
+  println(weather.tz);
+  println(Instant.now().getEpochSecond());
 
   clear = new Clear();
   clouds = new Clouds();
@@ -214,7 +217,11 @@ void displayText(int x, int y) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  description = weather.city + " " + convertTime(weather.dt + weather.tz) + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
+  ZoneOffset zone = ZoneOffset.ofTotalSeconds(weather.tz);
+  OffsetTime time = OffsetTime.now(zone);
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+  String timeStr = time.format(formatter); 
+  description = weather.city + " " + timeStr + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
