@@ -79,7 +79,7 @@ void draw() {
   }
   
   if (weather.windSpeed > WIND_THRESHOLD) {
-    
+    new Wind(weather.windSpeed).draw();
   }
   
   noStroke();
