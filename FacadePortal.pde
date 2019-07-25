@@ -85,14 +85,16 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
-  
-  color cloudColor;
-
 
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
-  if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
-    // SUNSET OR SUNRISE
+  if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
+    color c1 = color(114, 173, 214);
+    color c2 = color(227, 121, 59);
+    color c3 = color(245, 30, 38);
+    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
+    // SUNSET
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
     color c3 = color(245, 30, 38);
