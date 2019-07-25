@@ -120,6 +120,7 @@ abstract class ADrop implements Drop {
 
   // draws this drop
   void drawDrop() {
+    noStroke();
     fill(this.col);
     ellipse(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), 1, 1);
   }
