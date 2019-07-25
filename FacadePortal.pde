@@ -38,9 +38,9 @@ String description;
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr", 
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 boolean start = true;
@@ -83,6 +83,7 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
+
 
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
@@ -168,6 +169,7 @@ void draw() {
 
   wind.draw();
 
+
   noStroke();
 
   fill(255, 255, 255);
@@ -175,17 +177,15 @@ void draw() {
   float frameInterval = 2;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
-  case "Mist":
-  case "Smoke":
-  case "Haze":
-  case "Dust":
-  case "Fog":
-  case "Sand":
-  case "Ash":
-    frameInterval = 0.5;
-    break;
-  default:
-    //
+    case "Mist":
+    case "Smoke":
+    case "Haze":
+    case "Dust":
+    case "Fog":
+    case "Sand":
+    case "Ash":
+      frameInterval = 0.5;
+      break;
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
