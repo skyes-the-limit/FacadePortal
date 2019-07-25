@@ -126,15 +126,15 @@ abstract class ADrop implements Drop {
 }
 
 // to represent a raindrop
-class RainDrop extends ADrop {
+class RainDrop extends ADrop implements Drop {
 
   RainDrop() {
-    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 7)), new PVector(0, random(1, 5)), new PVector(random(width), 0));
+    super(color(random(168, 200), 100, 100), new PVector(0, random(3, 5)), new PVector(0, random(1, 2)), new PVector(random(width), 0));
   }
 }
 
 // to represent a snowflake
-class SnowDrop extends ADrop {
+class SnowDrop extends ADrop implements Drop {
   final float[] bounds = new float[2];
 
   SnowDrop() {
@@ -143,8 +143,8 @@ class SnowDrop extends ADrop {
     bounds[1] = pos.x + 1;
   }
 
-
-  void update() {
+  @Override
+    void update() {
     super.update();
     if (pos.x > bounds[1] || pos.x < bounds[0]) {
       vel.x *= -1;
