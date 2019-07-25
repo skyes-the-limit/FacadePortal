@@ -1,31 +1,21 @@
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 AEC aec;
-PFont font1;
+PFont font;
 
-// some parameters that turned out to work best for the font we're using
 private static final float FONT_SIZE = 6;
 private static final float FONT_OFFSET_Y = 0.12;
 private static final float FONT_SCALE_X = 2.669;
 private static final float FONT_SCALE_Y = 2.67;
 
-String cityName = "";
 Weather weather;
 
 void setup() {
   frameRate(25);
   size(1200, 400);
-
-  // NOTE: This font needs to be in the data folder.
-  // and it's available for free at http://www.dafont.com
-  // You COULD use a different font, but you'd have to tune the above parameters. Monospaced bitmap fonts work best.
-  font1 = createFont("FreePixel.ttf", 9, false);
-
-  // font1 = createFont("CourierNewPSMT", 9, false, charactersToInclude);
-  // font1 = loadFont("CourierNewPS-BoldMT-20.vlw");
+  font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + "London" + "&APPID=" + API_KEY);
   weather = new Weather(json);
-  cityName = weather.city;
 
   aec = new AEC();
   aec.init();
@@ -35,6 +25,7 @@ void draw() {
   aec.beginDraw();
   background(0, 0, 0);
   
+  // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
       break;
@@ -72,7 +63,7 @@ void draw() {
   
   noStroke();
 
-  fill(255, 0, 100);
+  fill(255, 255, 255);
 
   // determines the speed (number of frames between text movements)
   int frameInterval = 3;
@@ -99,13 +90,13 @@ void displayText(int x, int y)
 
   // scale the font up by fixed paramteres so it fits our grid
   scale(FONT_SCALE_X, FONT_SCALE_Y);
-  textFont(font1);
+  textFont(font);
   textSize(FONT_SIZE);
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
-  for (int i = 0; i < cityName.length(); i++)
+  for (int i = 0; i < weather.city.length(); i++)
   {
-    text(cityName.charAt(i), (float)i*3, 0);
+    text(weather.city.charAt(i), (float)i*3, 0);
   }
 
   popMatrix();
