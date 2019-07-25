@@ -35,7 +35,7 @@ void draw() {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
     color c2 = color(250, 185, 87);
-    setGradient(0, 0, width, height, c1, c2, Y_AXIS);
+    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
   }
   else if (now < weather.sunrise || now > weather.sunset) {
     // DAY
@@ -44,7 +44,7 @@ void draw() {
     // NIGHT
     background(8, 23, 66);
   }
-
+  
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
