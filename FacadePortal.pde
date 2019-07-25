@@ -33,6 +33,7 @@ Wind wind;
 
 String description;
 
+ArrayList<String> cities = new ArrayList();
 
 void setup() {
   frameRate(25);
@@ -61,10 +62,20 @@ void setup() {
   aec = new AEC();
   aec.init();
   description = "";
+
+
+  cities.add("London");
+  cities.add("New York");
+  cities.add("Paris");
+  cities.add("Tokyo");
+  cities.add("Beijing");
+  cities.add("Seattle");
+  cities.add("Rio de Janiero");
 }
 
 void draw() {
   aec.beginDraw();
+
 
   weather.windSpeed = 50;
   
@@ -85,8 +96,6 @@ void draw() {
   } else {
     background(0);
   }
-
-   description = weather.city + " " /*+ convertTime(weather.dt + weather.tz) + " "*/  + weather.mainWeather;
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
@@ -141,7 +150,6 @@ void draw() {
   }
 
   if (weather.windSpeed > WIND_THRESHOLD) {
-    println("over wind threshold");
     wind.draw();
   }
 
@@ -153,8 +161,8 @@ void draw() {
   float frameInterval = 2;
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
-  int minPos = -200;
-  int maxPos = 50;
+  int minPos = -220;
+  int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
 
   // vertical grid pos
@@ -176,9 +184,7 @@ void displayText(int x, int y) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  //println(weather.mainWeather);
-
-  description = weather.city + "  " + convertTime(weather.dt + weather.tz) + "  " + weather.mainWeather;
+  description = weather.city + " " + convertTime(weather.dt + weather.tz) + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
