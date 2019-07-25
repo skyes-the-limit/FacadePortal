@@ -1,7 +1,7 @@
 import java.time.*;
 
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+private static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";
 private static final int WIND_THRESHOLD = 30;
 private static final int SUN_THRESHOLD = 300;
 AEC aec;
@@ -13,6 +13,9 @@ private static final float FONT_SCALE_X = 2.669;
 private static final float FONT_SCALE_Y = 2.67;
 
 Weather weather;
+
+String description;
+
 
 void setup() {
   frameRate(25);
@@ -42,10 +45,10 @@ void draw() {
     // NIGHT
     background(8, 23, 66);
   }
-
-  String description = weather.city + "/t";
-
-  weather.mainWeather = "Haze";
+  
+  weather.mainWeather = "Smoke";
+  
+  description = weather.city + "/t";
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
