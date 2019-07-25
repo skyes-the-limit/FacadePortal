@@ -1,5 +1,11 @@
 class Thunderstorm implements WeatherCondition { 
-  APrecipitation precipitation;
+  final APrecipitation precipitation;
+  boolean flash = false;
+  boolean isDec = false;
+  boolean stutter = true;
+  int count = 0;
+  int add = 3;
+  int max = 80;
 
   Thunderstorm(APrecipitation precipitation) {
     this.precipitation = precipitation;
@@ -7,7 +13,37 @@ class Thunderstorm implements WeatherCondition {
 
   void draw() {
     this.precipitation.draw();
-    // TODO
+    if (frameCount % 30 == 0) {
+      flash = true;
+    }
+    if (flash) {
+      drawFlash();
+    }
+  }
+
+  void drawFlash() {
+    fill(255, map(count, 0, 30, 0, 100));
+    rect(0, 0, width, height);
+    if (count > max) {
+      isDec = true;
+    } else if (count < 25 && isDec && stutter) {
+      isDec = false;
+      stutter = false;
+      max = 160;
+    } else if (count < 0) {
+      isDec = false;
+      add = 3;
+      max = 60;
+      stutter = true;
+      flash = false;
+    }
+    if (isDec) {
+      count -= add;
+      add -= 3;
+    } else {
+      count += add;
+      add+=3;
+    }
   }
 }
 

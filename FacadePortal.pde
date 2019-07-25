@@ -12,7 +12,7 @@ static final float FONT_OFFSET_Y = 0.12;
 static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
-String city = "Minsk";
+String city = "Kathmandu";
 Weather weather;
 Clear clear;
 Clouds clouds;
