@@ -38,7 +38,7 @@ String[] cities = new String[]{"London","Paris","Tokyo","Beijing","Seattle","Rio
 "Boston","Sydney","Buenos Aires","Helsinki","Barcelona","Toronto","Mexico City","Dubai","Moscow","Istanbul",
 "Mumbai","New Delhi","Kathmandu","Bangkok","Santiago","Lima","Panama City","Reykjavik", "Athens","Marrakesh",
 "Cape Town","Tel Aviv","Cairo","Nairobi","Seoul","Shanghai","Lagos","Anchorage","Hong Kong","Jakarta", "Auckland", "Dallas"};
-  
+
 void setup() {
   frameRate(25);
   size(1200, 400);
@@ -71,8 +71,7 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-  weather.windSpeed = 50;
-
+  colorMode(RGB);
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
@@ -142,10 +141,7 @@ void draw() {
       break;
   }
 
-  if (weather.windSpeed > WIND_THRESHOLD) {
-    println("over wind threshold");
-    wind.draw();
-  }
+  wind.draw();
 
   noStroke();
 
@@ -180,7 +176,7 @@ void draw() {
 
   aec.endDraw();
   aec.drawSides();
-  
+
   if (xPos <= minPos + 10) {
     city++;
     if (city >= cities.length) {
@@ -194,7 +190,7 @@ void draw() {
 void displayText(int x, int y) {
   noStroke();
   fill(255);
-  
+
   // push & translate to the text origin
   pushMatrix();
   translate(x, y + FONT_OFFSET_Y);
@@ -204,8 +200,6 @@ void displayText(int x, int y) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  //println(weather.mainWeather);
-
   description = weather.city + " " + convertTime(weather.dt + weather.tz) + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
@@ -214,7 +208,7 @@ void displayText(int x, int y) {
       text(description.charAt(i), (float) i*3, 0);
     }
   }
-  
+
   popMatrix();
 }
 
