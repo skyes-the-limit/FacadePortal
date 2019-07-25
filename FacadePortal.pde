@@ -68,7 +68,7 @@ void setup() {
   ash = new Ash();
   squall = new Squall();
   tornado = new Tornado();
-  wind = new Wind();
+  wind = new Wind(weather.windSpeed);
 
   aec = new AEC();
   aec.init();
@@ -156,9 +156,8 @@ void draw() {
     break;
   }
 
-  if (weather.windSpeed > 7) {
-    wind.draw();
-  }
+  wind.draw();
+
 
   noStroke();
 
