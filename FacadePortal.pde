@@ -65,9 +65,7 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
-
-  weather.windSpeed = 50;
-
+  
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
@@ -140,7 +138,6 @@ void draw() {
   }
 
   if (weather.windSpeed > WIND_THRESHOLD) {
-    println("over wind threshold");
     wind.draw();
   }
 
@@ -174,8 +171,6 @@ void displayText(int x, int y) {
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
   textSize(FONT_SIZE);
-
-  //println(weather.mainWeather);
 
   description = weather.city + "  " + convertTime(weather.dt + weather.tz) + "  " + weather.mainWeather;
 

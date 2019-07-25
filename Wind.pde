@@ -22,8 +22,8 @@ class WindStroke {
 
   WindStroke(float x, float y, float dx, float dy) {
     this.location1 = new PVector(round(x), round(y));
+    this.location2 = new PVector(round(x) + 1, round(y));
     this.velocity = new PVector(round(dx), round(dy));
-    this.location2 = this.location1.add(velocity);
   }
 
   void progress() {
@@ -42,8 +42,6 @@ class Wind extends AWind {
   }
 
   void draw() {
-    println(this.strokes.size());
-    
     if (frameCount % this.frequency == 0) {
       float x = map((float) Math.random(), 0, 1, MIN_X_POS, MAX_X_POS);
       float y = map((float) Math.random(), 0, 1, MIN_Y_POS, MAX_Y_POS); 
