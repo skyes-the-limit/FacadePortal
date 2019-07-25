@@ -29,9 +29,11 @@ abstract class AWind implements WeatherCondition {
       this.strokes.add(new WindStroke(x, y, dx, dy));
     }
 
+    fill(this.strokeColor);  
     for (int i = 0; i < this.strokes.size(); i++) {
       WindStroke stroke = this.strokes.get(i);
-      //println(stroke.toString());
+      float x = stroke.location.x;
+      float y = stroke.location.y;
       if (stroke.age > lifespan) {
         strokes.remove(stroke);
         i--;
@@ -41,7 +43,13 @@ abstract class AWind implements WeatherCondition {
         }
         noStroke();
         fill(this.strokeColor);
-        rect(stroke.location.x, stroke.location.y, strokeLength, 1);
+        for (int j = 0; j < this.strokeLength; j++) {
+          if (j % 2 == 0) {
+            rect(x + j, y, 1, 1);  
+          } else {
+            rect(x + j, y - 1, 1, 1);
+          }
+        }
       }
     }
   }
@@ -65,8 +73,8 @@ class WindStroke {
 }
 
 class Wind extends AWind {
-  Wind(int windSpeed) {
-    super(8, 3, floor(windSpeed / 2), 1, color(255, 255, 255, 120));
+  Wind() {
+    super(8, 3, 4, 1, color(255, 255, 255, 120));
   }
 }
 

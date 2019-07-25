@@ -1,7 +1,7 @@
 import java.time.*;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 100;
 AEC aec;
@@ -61,7 +61,7 @@ void setup() {
   ash = new Ash();
   squall = new Squall();
   tornado = new Tornado();
-  wind = new Wind(weather.windSpeed);
+  wind = new Wind();
 
   aec = new AEC();
   aec.init();
@@ -70,6 +70,7 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
+  
 
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
@@ -141,7 +142,9 @@ void draw() {
       break;
   }
 
-  wind.draw();
+  if (weather.windSpeed > 7) {
+    wind.draw();
+  }
 
   noStroke();
 
@@ -159,8 +162,6 @@ void draw() {
     case "Ash":
       frameInterval = 0.5;
       break;
-    default:
-      //
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
