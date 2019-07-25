@@ -1,3 +1,16 @@
+class Thunderstorm implements WeatherCondition { 
+  APrecipitation precipitation;
+
+  Thunderstorm(APrecipitation precipitation) {
+    this.precipitation = precipitation;
+  }
+
+  void draw() {
+    this.precipitation.draw();
+    // TODO
+  }
+}
+
 // to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
@@ -49,19 +62,6 @@ class Drizzle extends APrecipitation {
 
   Drizzle() {
     super(3);
-  }
-}
-
-class Thunderstorm implements WeatherCondition { 
-  APrecipitation precipitation;
-
-  Thunderstorm(APrecipitation precipitation) {
-    this.precipitation = precipitation;
-  }
-
-  void draw() {
-    this.precipitation.draw();
-    // TODO
   }
 }
 
