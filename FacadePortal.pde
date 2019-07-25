@@ -36,7 +36,7 @@ String description;
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr", 
   "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
   "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
@@ -85,13 +85,20 @@ void draw() {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
-    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
+    color c3 = color(245, 30, 38);
+    setGradient(0, 0, width, height / 11,Y_AXIS, c1, c2, c3 );
   } else if (now < weather.sunrise || now > weather.sunset) {
-    // NIGHT
-    background(8, 23, 66);
+    //NIGHT
+    color c1 = color(8, 23, 66);
+    color c2 = color(36, 23, 81);
+    color c3 = color(20, 36, 107);
+    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    background(114, 173, 214);
+    color c1 = color(114, 173, 214);
+    color c2 = color(137, 171, 215);
+    color c3 = color(152, 181, 220);
+    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     background(0);
   }
