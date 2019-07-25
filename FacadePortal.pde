@@ -31,6 +31,9 @@ Squall squall;
 Tornado tornado;
 Wind wind;
 
+String description;
+
+
 void setup() {
   frameRate(25);
   size(1200, 400);
@@ -57,11 +60,12 @@ void setup() {
 
   aec = new AEC();
   aec.init();
+  description = "";
 }
 
 void draw() {
   aec.beginDraw();
-  
+
   weather.windSpeed = 50;
 
   long now = Instant.now().getEpochSecond();
@@ -80,7 +84,9 @@ void draw() {
   } else {
     background(0);
   }
-  
+
+   description = weather.city + " " /*+ convertTime(weather.dt + weather.tz) + " "*/  + weather.mainWeather;
+
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
@@ -143,17 +149,17 @@ void draw() {
   fill(255, 255, 255);
 
   // determines the speed (number of frames between text movements)
-  int frameInterval = 3;
+  float frameInterval = 2;
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
-  int minPos = -150;
+  int minPos = -200;
   int maxPos = 50;
-  int loopFrames = (maxPos - minPos) * frameInterval;
+  int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
 
   // vertical grid pos
   int yPos = 15;
 
-  displayText(max(minPos, maxPos - (frameCount % loopFrames) / frameInterval), yPos);
+  displayText(max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval)), yPos);
 
   aec.endDraw();
   aec.drawSides();
@@ -169,10 +175,15 @@ void displayText(int x, int y) {
   textFont(font);
   textSize(FONT_SIZE);
 
+  //println(weather.mainWeather);
+
+  description = weather.city + "  " + convertTime(weather.dt + weather.tz) + "  " + weather.mainWeather;
+
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
-  for (int i = 0; i < weather.city.length(); i++)
-  {
-    text(weather.city.charAt(i), (float)i*3, 0);
+  for (int i = 0; i < description.length(); i++) {
+    if (i < description.length()) {
+      text(description.charAt(i), (float) i*3, 0);
+    }
   }
 
   popMatrix();
