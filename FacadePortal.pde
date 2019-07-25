@@ -52,9 +52,11 @@ void setup() {
   font = createFont("FreePixel.ttf", 9, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
+  
+  weather.mainWeather = "Clouds";
 
   clear = new Clear();
-  clouds = new Clouds();
+  clouds = new Clouds(10);
   drizzle = new Drizzle();
   rain = new Rain();
   thunderstorm = new Thunderstorm(rain);
@@ -78,6 +80,8 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
+  
+  color cloudColor;
 
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
@@ -102,7 +106,7 @@ void draw() {
     clear.draw();
     break;
   case "Clouds":
-    clouds.draw();
+    clouds.draw(color(#DFDFDF, 100));
     break;
   case "Drizzle":
     drizzle.draw();
