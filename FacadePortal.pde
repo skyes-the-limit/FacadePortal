@@ -1,7 +1,7 @@
 import java.time.*;
 
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+private static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";
 private static final int WIND_THRESHOLD = 30;
 private static final int SUN_THRESHOLD = 300;
 AEC aec;
@@ -13,6 +13,9 @@ private static final float FONT_SCALE_X = 2.669;
 private static final float FONT_SCALE_Y = 2.67;
 
 Weather weather;
+
+String description;
+
 
 void setup() {
   frameRate(25);
@@ -28,9 +31,7 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-  //long now = Instant.now().getEpochSecond();
-  long now = weather.sunrise;
-
+  long now = Instant.now().getEpochSecond();
   if ((now - weather.sunrise) < SUN_THRESHOLD || (now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
@@ -45,7 +46,11 @@ void draw() {
     // NIGHT
     background(8, 23, 66);
   }
-  
+
+  weather.mainWeather = "Smoke";
+
+  description = weather.city + "/t";
+
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
@@ -98,9 +103,9 @@ void draw() {
       break;
   }
 
-  if (weather.windSpeed > WIND_THRESHOLD) {
-    new Wind(weather.windSpeed).draw();
-  }
+  //if (weather.windSpeed > WIND_THRESHOLD) {
+  //  new Wind(weather.windSpeed).draw();
+  //}
 
   noStroke();
 
@@ -136,7 +141,7 @@ void displayText(int x, int y) {
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < weather.city.length(); i++)
   {
-    text(weather.city.charAt(i), (float)i*3, 0);
+    text(description.charAt(i), (float)i*3, 0);
   }
 
   popMatrix();
