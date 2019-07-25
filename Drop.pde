@@ -33,6 +33,28 @@ abstract class APrecipitation implements WeatherCondition {
 }
 
 class Rain extends APrecipitation {
+  void draw() {
+    
+  }
+}
+
+class Drizzle extends APrecipitation {
+  void draw() {
+    
+  }
+}
+
+class Thunderstorm implements WeatherCondition { 
+  APrecipitation precipitation;
+  
+  Thunderstorm(APrecipitation precipitation) {
+    this.precipitation = precipitation;
+  }
+  
+  void draw() {
+    this.precipitation.draw();
+    // TODO
+  }
 }
 
 class Snow extends APrecipitation {

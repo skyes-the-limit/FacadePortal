@@ -52,7 +52,7 @@ void draw() {
       new Rain().draw();
       break;
     case "Thunderstorm":
-      new Thunderstorm().draw();
+      new Thunderstorm(new Rain()).draw();
       break;
     case "Snow":
       new Snow().draw();
