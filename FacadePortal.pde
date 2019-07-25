@@ -33,6 +33,7 @@ void draw() {
   aec.beginDraw();
 
   long now = Instant.now().getEpochSecond();
+  
   if ((now - weather.sunrise) < SUN_THRESHOLD || (now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
