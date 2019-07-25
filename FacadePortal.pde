@@ -28,13 +28,11 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-  //long now = Instant.now().getEpochSecond();
-  long now = weather.sunrise;
-
+  long now = Instant.now().getEpochSecond();
   if ((now - weather.sunrise) < SUN_THRESHOLD || (now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
-    color c2 = color(250, 185, 87);
+    color c2 = color(227, 121, 59);
     setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
   }
   else if (now < weather.sunrise || now > weather.sunset) {
