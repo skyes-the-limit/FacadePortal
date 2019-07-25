@@ -1,3 +1,5 @@
+import java.time.*;
+
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 private static final int WIND_THRESHOLD = 30;
@@ -25,9 +27,17 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
-  background(0, 0, 0);
-  weather.mainWeather = "Dust";
-  
+
+  Instant now = Instant.now();
+  Instant sunrise = Instant.ofEpochSecond(weather.sunrise);
+  Instant sunset = Instant.ofEpochSecond(weather.sunset);
+
+  if (now.isBefore(sunrise) || now.isAfter(sunset)) {
+    background(8, 23, 66);
+  } else if (now.isAfter(sunrise) && now.isBefore(sunset)) {
+    background(128, 189, 232);
+  }
+
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
@@ -40,10 +50,10 @@ void draw() {
       //new Drizzle().draw();
       break;
     case "Rain":
-      //new Rain.draw();
+      new Rain().draw();
       break;
     case "Thunderstorm":
-      //new Thunderstorm().draw();
+      new Thunderstorm(new Rain()).draw();
       break;
     case "Snow":
       //new Snow().draw();
@@ -71,7 +81,7 @@ void draw() {
       break;
     case "Squall":
       //new Squall().draw();
-      break;  
+      break;
     case "Tornado":
       //new Tornado().draw();
       break;
@@ -79,11 +89,11 @@ void draw() {
       println("WARN: hit default on main weather switch!");
       break;
   }
-  
+
   if (weather.windSpeed > WIND_THRESHOLD) {
-    
+    new Wind(weather.windSpeed).draw();
   }
-  
+
   noStroke();
 
   fill(255, 255, 255);
