@@ -1,8 +1,3 @@
-
-interface WeatherCondition {
-  void draw();
-}
-
 abstract class AirQuality implements WeatherCondition {
   float severity;
   color c;

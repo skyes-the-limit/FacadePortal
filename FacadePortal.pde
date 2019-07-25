@@ -1,5 +1,6 @@
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+private static final int WIND_THRESHOLD = 30;
 AEC aec;
 PFont font;
 
@@ -28,37 +29,57 @@ void draw() {
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
+      new Clear().draw();
       break;
     case "Clouds":
+      new Clouds().draw();
       break;
     case "Drizzle":
+      new Drizzle().draw();
       break;
     case "Rain":
+      new Rain.draw();
       break;
     case "Thunderstorm":
+      new Thunderstorm().draw();
       break;
     case "Snow":
+      new Snow().draw();
       break;
     case "Mist":
+      new Mist().draw();
       break;
     case "Smoke":
+      new Smoke().draw();
       break;
     case "Haze":
+      new Haze().draw();
       break;
     case "Dust":
+      new Dust().draw();
       break;
     case "Fog":
+      new Fog().draw();
       break;
     case "Sand":
+      new Sand().draw();
       break;
     case "Ash":
+      new Ash().draw();
       break;
     case "Squall":
+      new Squall().draw();
       break;  
     case "Tornado":
+      new Tornado().draw();
       break;
     default:
+      println("WARN: hit default on main weather switch!");
       break;
+  }
+  
+  if (weather.windSpeed > WIND_THRESHOLD) {
+    
   }
   
   noStroke();
@@ -82,8 +103,7 @@ void draw() {
   aec.drawSides();
 }
 
-void displayText(int x, int y)
-{
+void displayText(int x, int y) {
   // push & translate to the text origin
   pushMatrix();
   translate(x, y + FONT_OFFSET_Y);
