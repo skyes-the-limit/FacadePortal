@@ -1,8 +1,9 @@
 import java.time.*;
 
 private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-private static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";
+private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 private static final int WIND_THRESHOLD = 30;
+private static final int SUN_THRESHOLD = 300;
 AEC aec;
 PFont font;
 
@@ -27,17 +28,23 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-  Instant now = Instant.now();
-  Instant sunrise = Instant.ofEpochSecond(weather.sunrise);
-  Instant sunset = Instant.ofEpochSecond(weather.sunset);
-  if (now.isBefore(sunrise) || now.isAfter(sunset)) {
-    background(8, 23, 66);
-  } else if (now.isAfter(sunrise) && now.isBefore(sunset)) {
-    background(128, 189, 232);
+  long now = Instant.now().getEpochSecond();
+  if ((now - weather.sunrise) < SUN_THRESHOLD || (now - weather.sunset) < SUN_THRESHOLD) {
+    // SUNSET OR SUNRISE
+    color c1 = color(114, 173, 214);
+    color c2 = color(227, 121, 59);
+    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
   }
-  
+  else if (now < weather.sunrise || now > weather.sunset) {
+    // DAY
+    background(114, 173, 214);
+  } else if (now > weather.sunrise && now < weather.sunset) {
+    // NIGHT
+    background(8, 23, 66);
+  }
+
   String description = weather.city + "/t";
-  
+
   weather.mainWeather = "Haze";
 
   // cases for main weather: https://openweathermap.org/weather-conditions
