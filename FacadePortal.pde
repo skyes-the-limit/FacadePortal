@@ -14,6 +14,7 @@ private static final float FONT_SCALE_Y = 2.67;
 Weather weather;
 
 void setup() {
+  println(API_KEY);
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
@@ -26,27 +27,27 @@ void setup() {
 
 void draw() {
   aec.beginDraw();
-  
+
   Instant now = Instant.now();
   Instant sunrise = Instant.ofEpochSecond(weather.sunrise);
   Instant sunset = Instant.ofEpochSecond(weather.sunset);
-  
+
   if (now.isBefore(sunrise) || now.isAfter(sunset)) {
     background(8, 23, 66);
   } else if (now.isAfter(sunrise) && now.isBefore(sunset)) {
     background(128, 189, 232);
   }
-  
+
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
-      new Clear().draw();
+      //new Clear().draw();
       break;
     case "Clouds":
-      new Clouds().draw();
+      //new Clouds().draw();
       break;
     case "Drizzle":
-      new Drizzle().draw();
+      //new Drizzle().draw();
       break;
     case "Rain":
       new Rain().draw();
@@ -55,7 +56,7 @@ void draw() {
       new Thunderstorm(new Rain()).draw();
       break;
     case "Snow":
-      new Snow().draw();
+      //new Snow().draw();
       break;
     case "Mist":
       new Mist().draw();
@@ -79,20 +80,20 @@ void draw() {
       new Ash().draw();
       break;
     case "Squall":
-      new Squall().draw();
-      break;  
+      //new Squall().draw();
+      break;
     case "Tornado":
-      new Tornado().draw();
+      //new Tornado().draw();
       break;
     default:
       println("WARN: hit default on main weather switch!");
       break;
   }
-  
+
   if (weather.windSpeed > WIND_THRESHOLD) {
     new Wind(weather.windSpeed).draw();
   }
-  
+
   noStroke();
 
   fill(255, 255, 255);
