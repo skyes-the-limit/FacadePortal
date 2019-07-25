@@ -1,13 +1,16 @@
+// to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
-
+  
+  // generates some number of drops (of the right type) to be drawn
   void genDrops() {
     int genNum = (int)random(1, 6);
     for (int i = 0; i < genNum; i++) {
-      this.drops.add(new SnowDrop());
+      this.drops.add(new RainDrop());
     }
   }
-
+  
+  // removes all drops that are offscreen
   void remDrops() {
     ArrayList<Drop> toRemove = new ArrayList<Drop>();
     for (Drop drop : drops) {
@@ -17,12 +20,15 @@ abstract class APrecipitation implements WeatherCondition {
     }
     this.drops.removeAll(toRemove);
   }
-
+  
+  // draws every drop currently on screen
   void draw() {
     this.genDrops();
     for (Drop drop : drops) {
       drop.drawDrop();
+      drop.update();
     }
+    this.remDrops();
   }
 }
 
@@ -36,6 +42,7 @@ class Snow extends APrecipitation {
   }
 }
 
+// to represent something that's falling from the sky
 interface Drop {
 
   //Is this drop out of bounds?
@@ -48,12 +55,13 @@ interface Drop {
   void drawDrop();
 }
 
+// class to encompass some common characteristics of drops
 abstract class ADrop implements Drop {
   color col;
   PVector acc;
   PVector vel;
   PVector pos;
-
+  
   ADrop(color col, PVector acc, PVector vel, PVector pos) {
     colorMode(HSB, 360, 100, 100);
     this.col = col;
@@ -65,19 +73,21 @@ abstract class ADrop implements Drop {
   boolean offCanvas() {
     return pos.x > width || pos.y > height || pos.x < 0 || pos.y < 0;
   }
-
+  
+  // moves and accelerates this drop
   void update() {
     this.pos = this.pos.add(this.vel);
     this.vel = this.vel.add(this.acc);
   }
-
+  
+  // draws this drop
   void drawDrop() {
     fill(this.col);
     ellipse(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), 1, 1);
   }
 }
 
-
+// to represent a raindrop
 class RainDrop extends ADrop {
 
   RainDrop() {
@@ -85,6 +95,7 @@ class RainDrop extends ADrop {
   }
 }
 
+// to represent a snowflake
 class SnowDrop extends ADrop {
   int[] bounds = new int[2];
 
