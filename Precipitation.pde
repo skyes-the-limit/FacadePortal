@@ -121,7 +121,7 @@ abstract class ADrop implements Drop {
   void drawDrop() {
     noStroke();
     fill(this.col);
-    ellipse(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), 1, 1);
+    rect(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), 1, 1);
   }
 }
 
@@ -129,7 +129,7 @@ abstract class ADrop implements Drop {
 class RainDrop extends ADrop implements Drop {
 
   RainDrop() {
-    super(new PVector(0, random(3, 5)), new PVector(0, random(2, 5)), new PVector(random(width), 0), color(random(168, 200), 100, 100));
+    super(new PVector(0, random(3, 5)), new PVector(0, random(2, 5)), new PVector(random(width), 0), color(160, 236, 255));
   }
 }
 
@@ -138,7 +138,7 @@ class SnowDrop extends ADrop implements Drop {
   final float[] bounds = new float[2];
 
   SnowDrop() {
-    super( new PVector(0, random(3, 7)), new PVector(0.3, random(2, 5)), new PVector(random(width), 0), color(random(168, 200), 100, 100));
+    super( new PVector(0, random(3, 7)), new PVector(0.3, random(2, 5)), new PVector(random(width), 0), color(160, 236, 255));
     bounds[0] = pos.x - 1;
     bounds[1] = pos.x + 1;
   }
