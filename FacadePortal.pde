@@ -173,7 +173,6 @@ void draw() {
 
   wind.draw();
 
-
   noStroke();
 
   fill(255, 255, 255);
