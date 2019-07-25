@@ -1,18 +1,35 @@
 import java.time.*;
 
-private static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-private static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
-private static final int WIND_THRESHOLD = 30;
-private static final int SUN_THRESHOLD = 300;
+static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+static final int WIND_THRESHOLD = 30;
+static final int SUN_THRESHOLD = 100;
 AEC aec;
 PFont font;
 
-private static final float FONT_SIZE = 6;
-private static final float FONT_OFFSET_Y = 0.12;
-private static final float FONT_SCALE_X = 2.669;
-private static final float FONT_SCALE_Y = 2.67;
+static final float FONT_SIZE = 6;
+static final float FONT_OFFSET_Y = 0.12;
+static final float FONT_SCALE_X = 2.669;
+static final float FONT_SCALE_Y = 2.67;
 
+String city = "Boston";
 Weather weather;
+Clear clear;
+Clouds clouds;
+Drizzle drizzle;
+Rain rain;
+Thunderstorm thunderstorm;
+Snow snow;
+Mist mist;
+Smoke smoke;
+Haze haze;
+Dust dust;
+Fog fog;
+Sand sand;
+Ash ash;
+Squall squall;
+Tornado tornado;
+Wind wind;
 
 String description;
 
@@ -21,8 +38,25 @@ void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
-  JSONObject json = loadJSONObject(BASE_API_URL + "Minsk " + "&APPID=" + API_KEY);
+  JSONObject json = loadJSONObject(BASE_API_URL + city + "&APPID=" + API_KEY);
   weather = new Weather(json);
+
+  clear = new Clear();
+  clouds = new Clouds();
+  drizzle = new Drizzle();
+  rain = new Rain();
+  thunderstorm = new Thunderstorm(rain);
+  snow = new Snow();
+  mist = new Mist();
+  smoke = new Smoke();
+  haze = new Haze();
+  dust = new Dust();
+  fog = new Fog();
+  sand = new Sand();
+  ash = new Ash();
+  squall = new Squall();
+  tornado = new Tornado();
+  wind = new Wind(weather.windSpeed);
 
   aec = new AEC();
   aec.init();
@@ -32,78 +66,82 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
+  weather.windSpeed = 50;
+
   long now = Instant.now().getEpochSecond();
-  colorMode(RGB, 255, 255, 255);
-  if ((now - weather.sunrise) < SUN_THRESHOLD || (now - weather.sunset) < SUN_THRESHOLD) {
+  if (abs(now - weather.sunrise) < SUN_THRESHOLD || abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
-    color c3 = color(225, 40, 10);
-    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3);
-  } else if (now < weather.sunrise || now > weather.sunset) {
-    // DAY
-    background(114, 173, 214);
-  } else if (now > weather.sunrise && now < weather.sunset) {
+    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
+  }
+  else if (now < weather.sunrise || now > weather.sunset) {
     // NIGHT
     background(8, 23, 66);
+  } else if (now > weather.sunrise && now < weather.sunset) {
+    // DAY
+    background(114, 173, 214);
+  } else {
+    background(0);
   }
 
    description = weather.city + " " /*+ convertTime(weather.dt + weather.tz) + " "*/  + weather.mainWeather;
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
-  case "Clear":
-    new Clear().draw();
-    break;
-  case "Clouds":
-    new Clouds().draw();
-    break;
-  case "Drizzle":
-    new Drizzle().draw();
-    break;
-  case "Rain":
-    new Rain().draw();
-    break;
-  case "Thunderstorm":
-    new Thunderstorm(new Rain()).draw();
-    break;
-  case "Snow":
-    new Snow().draw();
-    break;
-  case "Mist":
-    new Mist().draw();
-    break;
-  case "Smoke":
-    new Smoke().draw();
-    break;
-  case "Haze":
-    new Haze().draw();
-    break;
-  case "Dust":
-    new Dust().draw();
-    break;
-  case "Fog":
-    new Fog().draw();
-    break;
-  case "Sand":
-    new Sand().draw();
-    break;
-  case "Ash":
-    new Ash().draw();
-    break;
-  case "Squall":
-    new Squall().draw();
-    break;
-  case "Tornado":
-    new Tornado().draw();
-    break;
-  default:
-    println("WARN: hit default on main weather switch!");
-    break;
+    case "Clear":
+      clear.draw();
+      break;
+    case "Clouds":
+      clouds.draw();
+      break;
+    case "Drizzle":
+      drizzle.draw();
+      break;
+    case "Rain":
+      rain.draw();
+      break;
+    case "Thunderstorm":
+      thunderstorm.draw();
+      break;
+    case "Snow":
+      snow.draw();
+      break;
+    case "Mist":
+      mist.draw();
+      break;
+    case "Smoke":
+      smoke.draw();
+      break;
+    case "Haze":
+      haze.draw();
+      break;
+    case "Dust":
+      dust.draw();
+      break;
+    case "Fog":
+      fog.draw();
+      break;
+    case "Sand":
+      sand.draw();
+      break;
+    case "Ash":
+      ash.draw();
+      break;
+    case "Squall":
+      squall.draw();
+      break;
+    case "Tornado":
+      tornado.draw();
+      break;
+    default:
+      println("WARN: hit default on main weather switch!");
+      break;
   }
 
   if (weather.windSpeed > WIND_THRESHOLD) {
-    new Wind(weather.windSpeed).draw();
+    println("over wind threshold");
+    wind.draw();
   }
 
   noStroke();
