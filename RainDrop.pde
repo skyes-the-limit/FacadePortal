@@ -1,7 +1,4 @@
-class Rain implements Drop {
-  PVector acc;
-  PVector vel;
-  PVector pos;
+class Rain extends ADrop implements Drop {
   color col;
 
   Rain() {
@@ -10,11 +7,6 @@ class Rain implements Drop {
     this.vel = new PVector(0, random(1, 5));
     this.acc = new PVector(0, random(1, 7));
     this.col = color(random(168, 200), 100, 100);
-  }
-  
-  void update() {
-    this.pos = this.pos.add(this.vel);
-    this.vel = this.vel.add(this.acc);
   }
   
   void drawDrop() {
