@@ -1,4 +1,6 @@
 import java.time.*;
+import java.util.Collections;
+import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
@@ -32,14 +34,19 @@ Wind wind;
 
 String description;
 
-int city = 38;
+int city = 0;
 
-String[] cities = new String[]{"London","Paris","Tokyo","Beijing","Seattle","Rio de Janeiro","Geneva",
-"Boston","Sydney","Buenos Aires","Helsinki","Barcelona","Toronto","Mexico City","Dubai","Moscow","Istanbul",
-"Mumbai","New Delhi","Kathmandu","Bangkok","Santiago","Lima","Panama City","Reykjavik", "Athens","Marrakesh",
-"Cape Town","Tel Aviv","Cairo","Nairobi","Seoul","Shanghai","Lagos","Anchorage","Hong Kong","Jakarta", "Auckland", "Dallas"};
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
+  "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
+
+boolean start = true;
 
 void setup() {
+  if (start) {
+    Collections.shuffle(Arrays.asList(cities));
+  }
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
@@ -66,11 +73,12 @@ void setup() {
   aec = new AEC();
   aec.init();
   description = "";
+  start = false;
 }
 
 void draw() {
   aec.beginDraw();
-  
+
 
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
@@ -78,68 +86,74 @@ void draw() {
     // SUNSET OR SUNRISE
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
-    setGradient(0, 0, width, height / 12, c1, c2, Y_AXIS);
-  }
-  else if (now < weather.sunrise || now > weather.sunset) {
-    // NIGHT
-    background(8, 23, 66);
+    color c3 = color(245, 30, 38);
+    setGradient(0, 0, width, height / 11,Y_AXIS, c1, c2, c3 );
+  } else if (now < weather.sunrise || now > weather.sunset) {
+    //NIGHT
+    color c1 = color(8, 23, 66);
+    color c2 = color(36, 23, 81);
+    color c3 = color(20, 36, 107);
+    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    background(114, 173, 214);
+    color c1 = color(114, 173, 214);
+    color c2 = color(137, 171, 215);
+    color c3 = color(152, 181, 220);
+    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     background(0);
   }
 
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
-    case "Clear":
-      clear.draw();
-      break;
-    case "Clouds":
-      clouds.draw();
-      break;
-    case "Drizzle":
-      drizzle.draw();
-      break;
-    case "Rain":
-      rain.draw();
-      break;
-    case "Thunderstorm":
-      thunderstorm.draw();
-      break;
-    case "Snow":
-      snow.draw();
-      break;
-    case "Mist":
-      mist.draw();
-      break;
-    case "Smoke":
-      smoke.draw();
-      break;
-    case "Haze":
-      haze.draw();
-      break;
-    case "Dust":
-      dust.draw();
-      break;
-    case "Fog":
-      fog.draw();
-      break;
-    case "Sand":
-      sand.draw();
-      break;
-    case "Ash":
-      ash.draw();
-      break;
-    case "Squall":
-      squall.draw();
-      break;
-    case "Tornado":
-      tornado.draw();
-      break;
-    default:
-      println("WARN: hit default on main weather switch!");
-      break;
+  case "Clear":
+    clear.draw();
+    break;
+  case "Clouds":
+    clouds.draw();
+    break;
+  case "Drizzle":
+    drizzle.draw();
+    break;
+  case "Rain":
+    rain.draw();
+    break;
+  case "Thunderstorm":
+    thunderstorm.draw();
+    break;
+  case "Snow":
+    snow.draw();
+    break;
+  case "Mist":
+    mist.draw();
+    break;
+  case "Smoke":
+    smoke.draw();
+    break;
+  case "Haze":
+    haze.draw();
+    break;
+  case "Dust":
+    dust.draw();
+    break;
+  case "Fog":
+    fog.draw();
+    break;
+  case "Sand":
+    sand.draw();
+    break;
+  case "Ash":
+    ash.draw();
+    break;
+  case "Squall":
+    squall.draw();
+    break;
+  case "Tornado":
+    tornado.draw();
+    break;
+  default:
+    println("WARN: hit default on main weather switch!");
+    break;
   }
 
   if (weather.windSpeed > 7) {

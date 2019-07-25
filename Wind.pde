@@ -9,7 +9,7 @@ abstract class AWind implements WeatherCondition {
   int strokeLength;
   int speed;
   color strokeColor;
-  
+
   private ArrayList<WindStroke> strokes = new ArrayList();  
 
   AWind(int lifespan, int frequency, int strokeLength, int speed, color strokeColor) {
@@ -19,7 +19,7 @@ abstract class AWind implements WeatherCondition {
     this.speed = speed;
     this.strokeColor = strokeColor;
   }
-  
+
   void draw() {
     if (frameCount % this.frequency == 0) {
       float x = map((float) Math.random(), 0, 1, MIN_X_POS, MAX_X_POS);

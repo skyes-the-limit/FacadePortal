@@ -44,9 +44,9 @@ class Mist extends Atmosphere {
   Mist() {
     super(0.2, #FFFFFF, false, true);
   }
-  
+
   @Override
-  void draw() {
+    void draw() {
     background(#A7C7D8);
     for (int h = 0; h < height; h += pixelSize) {
       for (int w = 0; w < width; w += pixelSize) {
