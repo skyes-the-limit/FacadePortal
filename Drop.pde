@@ -1,7 +1,7 @@
 // to represent Precipitation (i.e. a ton of stuff falling from the sky)
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
-  
+
   // generates some number of drops (of the right type) to be drawn
   void genDrops() {
     int genNum = (int)random(1, 6);
@@ -9,7 +9,7 @@ abstract class APrecipitation implements WeatherCondition {
       this.drops.add(new RainDrop());
     }
   }
-  
+
   // removes all drops that are offscreen
   void remDrops() {
     ArrayList<Drop> toRemove = new ArrayList<Drop>();
@@ -20,7 +20,7 @@ abstract class APrecipitation implements WeatherCondition {
     }
     this.drops.removeAll(toRemove);
   }
-  
+
   // draws every drop currently on screen
   void draw() {
     this.genDrops();
@@ -32,9 +32,13 @@ abstract class APrecipitation implements WeatherCondition {
   }
 }
 
+class Rain extends APrecipitation {
+}
+
 class Snow extends APrecipitation {
 
-  void genDrops() {
+  @Override
+    void genDrops() {
     int genNum = (int)random(1, 6);
     for (int i = 0; i < genNum; i++) {
       this.drops.add(new SnowDrop());
@@ -61,7 +65,7 @@ abstract class ADrop implements Drop {
   PVector acc;
   PVector vel;
   PVector pos;
-  
+
   ADrop(color col, PVector acc, PVector vel, PVector pos) {
     colorMode(HSB, 360, 100, 100);
     this.col = col;
@@ -73,13 +77,13 @@ abstract class ADrop implements Drop {
   boolean offCanvas() {
     return pos.x > width || pos.y > height || pos.x < 0 || pos.y < 0;
   }
-  
+
   // moves and accelerates this drop
   void update() {
     this.pos = this.pos.add(this.vel);
     this.vel = this.vel.add(this.acc);
   }
-  
+
   // draws this drop
   void drawDrop() {
     fill(this.col);

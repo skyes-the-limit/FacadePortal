@@ -38,7 +38,7 @@ void draw() {
       new Drizzle().draw();
       break;
     case "Rain":
-      new Rain.draw();
+      new Rain().draw();
       break;
     case "Thunderstorm":
       new Thunderstorm().draw();
