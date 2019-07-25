@@ -4,7 +4,7 @@ public class Weather {
   final String city;
   final String country;
   final double latitude;
-  final String mainWeather;  // Rain, Snow, Extreme, etc.
+   String mainWeather;  // Rain, Snow, Extreme, etc.
   final int windSpeed;       // meter/sec
   final long sunrise;        // seconds UTC
   final long sunset;         // seconds UTC
