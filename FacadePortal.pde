@@ -86,24 +86,32 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
+  color cloudColor;
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
-    color c1 = color(114, 173, 214);
-    color c2 = color(227, 121, 59);
-    color c3 = color(245, 30, 38);
-    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+    //SUNRISE
+    color c1 = #9CD6FF;
+    color c2 = #9CD6FF;
+    color c3 = #CEEBFF;
+    color c4 = #FFFFCE;
+    color c5 = #FFC78A;
+    color c6 = #FFC78A;
+    cloudColor = #FFFFFF;
+    setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
     color c1 = color(114, 173, 214);
     color c2 = color(227, 121, 59);
     color c3 = color(245, 30, 38);
+    cloudColor = #FFFFFF;
     setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
     color c2 = color(36, 23, 81);
     color c3 = color(20, 36, 107);
+    cloudColor = #DFDFDF;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
     for (PVector star : stars) {
       noStroke();
@@ -115,10 +123,12 @@ void draw() {
     color c1 = color(114, 173, 214);
     color c2 = color(177, 211, 245);
     color c3 = color(202, 231, 255);
+    cloudColor = #DFDFDF;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
+    cloudColor = #DFDFDF;
   }
 
   // cases for main weather: https://openweathermap.org/weather-conditions
@@ -127,7 +137,7 @@ void draw() {
     clear.draw();
     break;
   case "Clouds":
-    clouds.draw(color(#DFDFDF, 100));
+    clouds.draw(color(cloudColor, 100));
     break;
   case "Drizzle":
     drizzle.draw();
