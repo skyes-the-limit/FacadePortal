@@ -2,6 +2,10 @@
 abstract class APrecipitation implements WeatherCondition {
   ArrayList<Drop> drops;
 
+  APrecipitation() { 
+    drops = new ArrayList<Drop>();
+  }
+
   // generates some number of drops (of the right type) to be drawn
   void genDrops() {
     int genNum = (int)random(1, 6);
@@ -33,24 +37,18 @@ abstract class APrecipitation implements WeatherCondition {
 }
 
 class Rain extends APrecipitation {
-  void draw() {
-    
-  }
 }
 
 class Drizzle extends APrecipitation {
-  void draw() {
-    
-  }
 }
 
 class Thunderstorm implements WeatherCondition { 
   APrecipitation precipitation;
-  
+
   Thunderstorm(APrecipitation precipitation) {
     this.precipitation = precipitation;
   }
-  
+
   void draw() {
     this.precipitation.draw();
     // TODO
