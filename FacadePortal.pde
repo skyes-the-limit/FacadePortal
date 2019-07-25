@@ -34,6 +34,42 @@ void setup() {
 void draw() {
   aec.beginDraw();
   background(0, 0, 0);
+  
+  switch(weather.mainWeather) {
+    case "Clear":
+      break;
+    case "Clouds":
+      break;
+    case "Drizzle":
+      break;
+    case "Rain":
+      break;
+    case "Thunderstorm":
+      break;
+    case "Snow":
+      break;
+    case "Mist":
+      break;
+    case "Smoke":
+      break;
+    case "Haze":
+      break;
+    case "Dust":
+      break;
+    case "Fog":
+      break;
+    case "Sand":
+      break;
+    case "Ash":
+      break;
+    case "Squall":
+      break;  
+    case "Tornado":
+      break;
+    default:
+      break;
+  }
+  
   noStroke();
 
   fill(255, 0, 100);
