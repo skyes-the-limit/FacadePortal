@@ -40,13 +40,13 @@ void draw() {
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
     case "Clear":
-      //new Clear().draw();
+      new Clear().draw();
       break;
     case "Clouds":
-      //new Clouds().draw();
+      new Clouds().draw();
       break;
     case "Drizzle":
-      //new Drizzle().draw();
+      new Drizzle().draw();
       break;
     case "Rain":
       new Rain().draw();
@@ -55,7 +55,7 @@ void draw() {
       new Thunderstorm(new Rain()).draw();
       break;
     case "Snow":
-      //new Snow().draw();
+      new Snow().draw();
       break;
     case "Mist":
       new Mist().draw();
@@ -79,10 +79,10 @@ void draw() {
       new Ash().draw();
       break;
     case "Squall":
-      //new Squall().draw();
+      new Squall().draw();
       break;
     case "Tornado":
-      //new Tornado().draw();
+      new Tornado().draw();
       break;
     default:
       println("WARN: hit default on main weather switch!");
