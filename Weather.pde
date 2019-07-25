@@ -10,6 +10,7 @@ public class Weather {
   final long sunset;         // seconds UTC
   final long dt;             // seconds UTC
   final long tz;       // shift in seconds from UTC
+  final double temp;
 
   Weather(JSONObject json) {
     println(json.toString());
@@ -23,6 +24,7 @@ public class Weather {
     this.sunset = json.getJSONObject("sys").getLong("sunset");
     this.dt = json.getLong("dt");
     this.tz = json.getLong("timezone");
+    this.temp = json.getJSONObject("main").getDouble("temp");
   }
 }
 
