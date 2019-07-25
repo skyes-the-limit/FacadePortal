@@ -62,22 +62,10 @@ void setup() {
   aec = new AEC();
   aec.init();
   description = "";
-
-
-  cities.add("London");
-  cities.add("New York");
-  cities.add("Paris");
-  cities.add("Tokyo");
-  cities.add("Beijing");
-  cities.add("Seattle");
-  cities.add("Rio de Janiero");
 }
 
 void draw() {
   aec.beginDraw();
-
-
-  weather.windSpeed = 50;
   
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
@@ -149,9 +137,7 @@ void draw() {
       break;
   }
 
-  if (weather.windSpeed > WIND_THRESHOLD) {
-    wind.draw();
-  }
+  wind.draw();
 
   noStroke();
 
