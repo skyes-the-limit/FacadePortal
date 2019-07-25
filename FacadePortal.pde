@@ -36,6 +36,8 @@ void draw() {
     background(128, 189, 232);
   }
   
+  String description = weather.city + "/t";
+  
   weather.mainWeather = "Haze";
 
   // cases for main weather: https://openweathermap.org/weather-conditions
@@ -90,9 +92,9 @@ void draw() {
       break;
   }
 
-  if (weather.windSpeed > WIND_THRESHOLD) {
-    new Wind(weather.windSpeed).draw();
-  }
+  //if (weather.windSpeed > WIND_THRESHOLD) {
+  //  new Wind(weather.windSpeed).draw();
+  //}
 
   noStroke();
 
@@ -128,7 +130,7 @@ void displayText(int x, int y) {
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < weather.city.length(); i++)
   {
-    text(weather.city.charAt(i), (float)i*3, 0);
+    text(description.charAt(i), (float)i*3, 0);
   }
 
   popMatrix();

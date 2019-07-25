@@ -13,16 +13,16 @@ abstract class Atmosphere implements WeatherCondition {
   }
   
   void draw() {
+    background(#A7C7D8);
     if(particles) {
-      //loadPixels();
        for (int h = 0; h < height; h += pixelSize) {
          for (int w = 0; w < width; w += pixelSize) {
-           int alpha = (int) (255 * (severity * new Random().nextFloat()));
+           int alpha = (int) (255 * (0.2 + severity * new Random().nextInt(3) * 0.2));
            fill(c, alpha);
+           noStroke();
            rect(w,h,pixelSize,pixelSize);
          }
        }
-       //updatePixels();
     } else {
       
     }
@@ -49,7 +49,7 @@ class Smoke extends Atmosphere {
 
 class Haze extends Atmosphere {
   Haze() {
-    super(0.7, #A38954, true);
+    super(0.7, #B5821B, true);
   }
 }
 
