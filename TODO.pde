@@ -2,6 +2,7 @@
 
 // light, regular, and heavy levels for weather
 // slow down text scroll speed
+// black text in the day, white text at night (?)
 // make only 1 space between letters rather than 2
 // remove time/status/temperature from the text - the inspiration is that the location is what matters
 //     and the actual "weather" aspect shouldn't be the focus, or should be implicit
