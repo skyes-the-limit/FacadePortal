@@ -84,20 +84,20 @@ void setup() {
   description = "";
   start = false;
 
-  german.add("Tokyo", "Tokio");
-  german.add("Beijing", "Peking");
-  german.add("Geneva", "Genf");
-  german.add("Mexico City", "Mexiko-Stadt");
-  german.add("Moscow", "Moskau");
-  german.add("New Delhi", "Neu-Delhi");
-  german.add("Panama City", "Panama-Stadt");
-  german.add("Reykjavik", "Reykjavík");
-  german.add("Athens", "Athen");
-  german.add("Marrakesh", "Marrakesch");
-  german.add("Cape Town", "Kapstadt");
-  german.add("Tel Aviv", "Tel Aviv-Jaffa");
-  german.add("Cairo", "Kairo");
-  german.add("Hong Kong", "Hongkong");
+  german.put("Tokyo", "Tokio");
+  german.put("Beijing", "Peking");
+  german.put("Geneva", "Genf");
+  german.put("Mexico City", "Mexiko-Stadt");
+  german.put("Moscow", "Moskau");
+  german.put("New Delhi", "Neu-Delhi");
+  german.put("Panama City", "Panama-Stadt");
+  german.put("Reykjavik", "Reykjavík");
+  german.put("Athens", "Athen");
+  german.put("Marrakesh", "Marrakesch");
+  german.put("Cape Town", "Kapstadt");
+  german.put("Tel Aviv", "Tel Aviv-Jaffa");
+  german.put("Cairo", "Kairo");
+  german.put("Hong Kong", "Hongkong");
 }
 
 void draw() {

@@ -16,7 +16,7 @@ abstract class AWind implements WeatherCondition {
     this.lifespan = round(intensity * 1.5);
     this.frequency = 8 - intensity; 
     this.strokeSize = intensity;
-    this.speed = 14 - (intensity * 2);
+    this.speed = 20 - (intensity * 4);
     this.strokeColor = strokeColor;
   }
 
