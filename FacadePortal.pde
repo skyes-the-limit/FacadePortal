@@ -271,8 +271,8 @@ void draw() {
 
   // DRAW WEATHER -----------------------------------------------------------------------------------
 
-  condition.draw();
   buildings.draw();
+  condition.draw();
   wind.draw();
   clouds.draw();
 
