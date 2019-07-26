@@ -33,16 +33,19 @@ Squall squall;
 Tornado tornado;
 Wind wind;
 
+Buildings buildings;
+
 ArrayList<PVector> stars = new ArrayList<PVector>();
 
 String description;
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr",
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr", 
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
+
 
 boolean start = true;
 
@@ -53,11 +56,12 @@ void setup() {
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
-  frameRate(25);
+  frameRate(23);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
+
 
   clear = new Clear();
   clouds = new Clouds(1);
@@ -76,6 +80,7 @@ void setup() {
   tornado = new Tornado();
   wind = new Wind(weather.windSpeed);
 
+  buildings = new Buildings(20, height / 3);
   aec = new AEC();
   aec.init();
   description = "";
@@ -133,6 +138,8 @@ void draw() {
     textColor = #000000;
   }
 
+  buildings.draw();
+
   //weather.mainWeather = "Fog";
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
@@ -187,6 +194,7 @@ void draw() {
   }
 
   wind.draw();
+  buildings.draw();
 
   noStroke();
 
@@ -195,15 +203,15 @@ void draw() {
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
-    case "Mist":
-    case "Smoke":
-    case "Haze":
-    case "Dust":
-    case "Fog":
-    case "Sand":
-    case "Ash":
-      frameInterval = 0.5;
-      break;
+  case "Mist":
+  case "Smoke":
+  case "Haze":
+  case "Dust":
+  case "Fog":
+  case "Sand":
+  case "Ash":
+    frameInterval = 0.5;
+    break;
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
