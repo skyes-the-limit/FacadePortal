@@ -47,7 +47,7 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 boolean start = true;
 
 void setup() {
-  for (int i = 0; i <= 300; i++) {
+  for (int i = 0; i <= 100; i++) {
     stars.add(new PVector(random(width*0.4), random(height / 12)));
   }
   if (start) {
@@ -60,7 +60,7 @@ void setup() {
   weather = new Weather(json);
 
   clear = new Clear();
-  clouds = new Clouds(10);
+  clouds = new Clouds(1);
   drizzle = new Drizzle();
   rain = new Rain();
   thunderstorm = new Thunderstorm(rain);
@@ -120,14 +120,15 @@ void draw() {
     println("WARN: hit last else on sky fill!");
     background(0);
   }
-
+  
+  //weather.mainWeather = "Fog";
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
   case "Clear":
     clear.draw();
     break;
   case "Clouds":
-    clouds.draw(color(#DFDFDF, 100));
+    clouds.draw(color(#DFDFDF, 210));
     break;
   case "Drizzle":
     drizzle.draw();
@@ -179,7 +180,7 @@ void draw() {
 
   fill(255, 255, 255);
 
-  float frameInterval = 2;
+  float frameInterval = 3;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
     case "Mist":
