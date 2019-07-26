@@ -106,87 +106,44 @@ void setup() {
     clouds = new Clouds(intensity);
     break;
   case "Mist":
-    switch (description) {
-      
-    }
-    condition = new Mist(intensity);
+    condition = new Mist();
     textColor = #000000;
     break;
   case "Smoke":
-    switch (description) {
-      
-    }
-    condition = new Smoke(intensity);
+    condition = new Smoke();
     textColor = #000000;
     break;
   case "Haze":
-    switch (description) {
-      
-    }
-    condition = new Haze(intensity);
+    condition = new Haze();
     textColor = #000000;
     break;
   case "Dust":
-    switch (description) {
-      
-    }
-    condition = new Dust(intensity);
+    condition = new Dust();
     textColor = #000000;
     break;
   case "Fog":
-    switch (description) {
-      
-    }
-    condition = new Fog(intensity);
+    condition = new Fog();
     textColor = #000000;
     break;
   case "Sand":
-    switch (description) {
-      
-    }
-    condition = new Sand(intensity);
+    condition = new Sand();
     textColor = #000000;
     break;
   case "Ash":
-    switch (description) {
-      
-    }
-    condition = new Ash(intensity);
+    condition = new Ash();
     textColor = #000000;
     break;
   case "Squall":
-    switch (description) {
-      
-    }
-    condition = new Squall(intensity);
+    condition = new Squall();
     break;
   case "Tornado":
-    switch (description) {
-      
-    }
-    condition = new Tornado(intensity);
+    condition = new Tornado();
     break;
   default:
     println("WARN: hit default on main weather switch!");
     break;
   }
 
-
-  clear = new Clear();
-  clouds = new Clouds(density);
-  drizzle = new Drizzle();
-  rain = new Rain();
-  thunderstorm = new Thunderstorm(rain);
-  snow = new Snow();
-  mist = new Mist();
-  smoke = new Smoke();
-  haze = new Haze();
-  dust = new Dust();
-  fog = new Fog();
-  sand = new Sand();
-  ash = new Ash();
-  squall = new Squall();
-  tornado = new Tornado();
   wind = new Wind(weather.windSpeed);
 
   aec = new AEC();
