@@ -142,3 +142,8 @@ public class Weather {
 interface WeatherCondition {
   void draw();
 }
+
+class Clear implements WeatherCondition {
+  void draw() {
+  }
+}
