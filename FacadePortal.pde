@@ -256,7 +256,6 @@ void draw() {
       PVector star = stars.get(i);
       noStroke();
       int alpha = 170 + round(sin(((frameCount / 5) + i) % 360) * 80);
-      println(alpha);
       fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
