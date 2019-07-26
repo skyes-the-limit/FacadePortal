@@ -234,13 +234,17 @@ void draw() {
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
-    textColor = #FFFFFF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     // NIGHT
     color c1 = #001639;
     color c2 = #1F007A;
-    textColor = #FFFFFF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
     for (int i = 0; i < stars.size(); i++) {
       PVector star = stars.get(i);
