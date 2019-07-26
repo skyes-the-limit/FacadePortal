@@ -110,8 +110,8 @@ void draw() {
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
-    color c1 = #0b3157;
-    color c2 = #14246b;
+    color c1 = #081C3B;
+    color c2 = #133771;
     cloudColor = #DFDFDF;
     textColor = #FFFFFF;
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
@@ -122,8 +122,8 @@ void draw() {
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    color c1 = #5991B8;
-    color c2 = #8caecf;
+    color c1 = #2677AF;
+    color c2 = #629CD5;
     cloudColor = #DFDFDF;
     textColor = #000000;
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
