@@ -39,9 +39,9 @@ String description;
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
@@ -50,16 +50,16 @@ HashMap<String, String> skyscrapers = new HashMap();
 boolean start = true;
 
 void setup() {
-  for (int i = 0; i <= 100; i++) {
-    stars.add(new PVector(random(width*0.4), random(height / 12)));
+  for (int i = 0; i <= 65; i++) {
+    stars.add(new PVector(random(width / 4), random(height / 12)));
   }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
   frameRate(25);
   size(1200, 400);
-  font = createFont("FreePixel.ttf", 9, false);
-   JSONObject json = loadJSONObject(BASE_API_URL + "Wein"/*cities[city]*/  + "&APPID=" + API_KEY);
+  font = createFont("FreePixel.ttf", 10, false);
+  JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
   clear = new Clear();
@@ -117,7 +117,7 @@ void draw() {
     color c5 = #FFC78A;
     color c6 = #FFC78A;
     textColor = #000000;
-    setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
     color c1 = color(34, 1, 78);
@@ -125,33 +125,35 @@ void draw() {
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
-    color c1 = color(8, 23, 66);
-    color c2 = color(36, 23, 81);
-    color c3 = color(20, 36, 107);
+    color c1 = #081C3B;
+    color c2 = #133771;
+    cloudColor = #DFDFDF;
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
-    for (PVector star : stars) {
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
+    for (int i = 0; i < stars.size(); i++) {
+      PVector star = stars.get(i);
       noStroke();
-      fill(255, 190);
+      int alpha = 170 + round(sin(((frameCount / 5) + i) % 360) * 80);
+      println(alpha);
+      fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    color c1 = color(114, 173, 214);
-    color c2 = color(177, 211, 245);
-    color c3 = color(202, 231, 255);
+    color c1 = #2677AF;
+    color c2 = #629CD5;
+    cloudColor = #DFDFDF;
     textColor = #000000;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
     textColor = #000000;
   }
 
-  //weather.mainWeather = "Fog";
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
   case "Clear":
@@ -210,7 +212,7 @@ void draw() {
 
   fill(255, 255, 255);
 
-  float frameInterval = 3;
+  float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
   case "Mist":
