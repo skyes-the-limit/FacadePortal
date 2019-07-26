@@ -112,12 +112,11 @@ void draw() {
     setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
-    color c1 = color(8, 23, 66);
-    color c2 = color(36, 23, 81);
-    color c3 = color(20, 36, 107);
+    color c1 = #0b3157;
+    color c2 = #14246b;
     cloudColor = #DFDFDF;
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    setGradient(0, 0, width, height / 6, Y_AXIS, c1, c2);
     for (PVector star : stars) {
       noStroke();
       fill(255, 190);
@@ -125,12 +124,11 @@ void draw() {
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    color c1 = color(114, 173, 214);
-    color c2 = color(177, 211, 245);
-    color c3 = color(202, 231, 255);
+    color c1 = #5991B8;
+    color c2 = #8caecf;
     cloudColor = #DFDFDF;
     textColor = #000000;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    setGradient(0, 0, width, height / 8, Y_AXIS, c1, c2);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
@@ -138,7 +136,6 @@ void draw() {
     textColor = #000000;
   }
 
-  //weather.mainWeather = "Fog";
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
   case "Clear":
