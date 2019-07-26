@@ -1,6 +1,6 @@
 // to represent a cityscape
 class Buildings {
-  static final int MAX_WIDTH = 50;
+  static final int MAX_WIDTH = 45;
   
   static final int HIGH_DENS = 10;
   static final int MED_DENS = 20;
@@ -31,12 +31,12 @@ class Buildings {
   void genBuildings() {
     float currentX = 0;
     while (currentX < width * 0.6) {
-      float bWidth = random(20, MAX_WIDTH);
+      float bWidth = random(15, MAX_WIDTH);
       float bHeight = random(maxHeight * 0.4, maxHeight);
       float[] bound = new float[] { currentX, bHeight, bWidth };
       bounds.add(bound);
       currentX += bWidth;
-      float space = max(0, random(map(density, 0, 70, -15, -3), density));
+      float space = max(0, random(map(density, 10, 30, -7, -3), density));
       currentX += space;
     }
   }

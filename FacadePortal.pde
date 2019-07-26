@@ -1,11 +1,12 @@
 /*
-Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
+ Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
  Creative Coding - Summer 2 2019
-
+ 
  REFERENCES:
  https://openweathermap.org/weather-conditions
  https://openweathermap.org/current#current_JSON
  */
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -51,9 +52,9 @@ String description = "";
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
@@ -208,7 +209,7 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-// DRAW BACKGROUND --------------------------------------------------------------------
+  // DRAW BACKGROUND --------------------------------------------------------------------
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -271,7 +272,7 @@ void draw() {
   // DRAW WEATHER -----------------------------------------------------------------------------------
 
   condition.draw();
-  //buildings.draw();
+  buildings.draw();
   wind.draw();
   clouds.draw();
 
@@ -294,7 +295,7 @@ void draw() {
   aec.endDraw();
   aec.drawSides();
 
-// TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
+  // TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
   if (xPos <= minPos + 10) {
     reset();
   }
@@ -326,9 +327,9 @@ void displayText(int x, int y, color c) {
 void keyPressed() {
   aec.keyPressed(key);
   switch (key) {
-    case 'r':
-     reset();
-     break;
+  case 'r':
+    reset();
+    break;
   }
 }
 
