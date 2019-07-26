@@ -299,13 +299,14 @@ void draw() {
   // DRAW TEXT --------------------------------------------------------------------------------------
   noStroke();
   fill(255, 255, 255);
-  float frameInterval = 2.5;
+  float frameInterval = 5;
   // determines the speed (number of frames between text movements)
   if (Arrays.asList("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Ash").contains(weather.mainWeather)) {
-    frameInterval = 0.5;
+    frameInterval = 1;
   }
+  description = city + " " + convertTemp(weather.temp);
 
-  int minPos = -200;
+  int minPos = - (description.length() * 8 + 80);
   int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
   int yPos = 15;
