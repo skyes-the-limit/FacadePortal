@@ -159,7 +159,6 @@ void setup() {
     break;
   }
 
-  clouds = new Clouds(intensity);
   wind = new Wind(weather.windSpeed);
 
   // START AEC

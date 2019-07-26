@@ -6,6 +6,9 @@ class Clouds implements WeatherCondition {
   Clouds(int dens) {
     clouds = new ArrayList<Cloud>();
     density = dens;
+    if (density > 25) {
+     density = 25; 
+    }
     genClouds(true);
     tick = 0;
   }
