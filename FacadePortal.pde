@@ -115,9 +115,12 @@ void draw() {
     cloudColor = #DFDFDF;
     textColor = #FFFFFF;
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
-    for (PVector star : stars) {
+    for (int i = 0; i < stars.size(); i++) {
+      PVector star = stars.get(i);
       noStroke();
-      fill(255, 170);
+      int alpha = 170 + round(sin(((frameCount / 5) + i) % 360) * 80);
+      println(alpha);
+      fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
