@@ -9,7 +9,6 @@
 // make all "sky" blues a bit darker & more green-blue (less purple)
 // reduce velocity on rain/snow
 // reduce density of clouds
-// increase opacity on wind
 // stars read as snow- maybe we can make their brightness "twinkle" over time?
 // up contrast basically everywhere
 // extend time window to indicate sunset/sunrise
