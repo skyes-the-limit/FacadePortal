@@ -41,7 +41,7 @@ class Clouds implements WeatherCondition {
   void draw() {
     this.genClouds(false);
     for (Cloud cloud : clouds) {
-      cloud.drawCloud(c);
+      cloud.drawCloud();
       cloud.update();
     }
     this.remClouds();

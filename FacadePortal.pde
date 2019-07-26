@@ -16,8 +16,8 @@ static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weath
 static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 2700;
-static final AEC aec;
-static final PFont font = createFont("FreePixel.ttf", 10, false);
+AEC aec;
+PFont font;
 
 static final float FONT_SIZE = 6;
 static final float FONT_OFFSET_Y = 0.12;
@@ -55,6 +55,27 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
+HashMap<String, String> skyscrapers = new HashMap();
+
+boolean start = true;
+
+color textColor = #FF0000;
+
+void setup() {
+  // BASIC SETUP
+  colorMode(RGB);
+  frameRate(25);
+  size(1200, 400);
+  font = createFont("FreePixel.ttf", 10, false);
+  aec = new AEC();
+
+  // POPULATE STARS, GERMAN, & SKYSCRAPERS ------------------------------------------------
+  for (int i = 0; i <= 65; i++) {
+    stars.add(new PVector(random(width / 4), random(height / 12)));
+  }
+  if (start) {
+    Collections.shuffle(Arrays.asList(cities));
+  }
   german.put("Tokyo", "Tokio");
   german.put("Beijing", "Peking");
   german.put("Geneva", "Genf");
@@ -70,39 +91,16 @@ HashMap<String, String> german = new HashMap();
   german.put("Cairo", "Kairo");
   german.put("Hong Kong", "Hongkong");
 
-HashMap<String, String> skyscrapers = new HashMap();
-
-boolean start = true;
-
-color textColor = #FF0000;
-
-void setup() {
-  // BASIC SETUP
-  colorMode(RGB);
-  frameRate(25);
-  size(1200, 400);
-
-  // POPULATE STARS
-  for (int i = 0; i <= 65; i++) {
-    stars.add(new PVector(random(width / 4), random(height / 12)));
-  }
-  if (start) {
-    Collections.shuffle(Arrays.asList(cities));
-  }
-
-  // LOAD WEATHER CONDITION FOR CITY
+  // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
-  int intensity;
-  WeatherCondition condition = null;
-  Clouds clouds = new Clouds(0);
+  int intensity = 0;
   switch (weather.mainWeather) {
   case "Clouds":
     switch (description) {
-
+      // reassign intensity here, construct clouds later
     }
-    clouds = new Clouds(intensity);
   case "Clear":
     condition = new Clear();
     break;
@@ -172,11 +170,11 @@ void setup() {
     println("WARN: hit default on main weather switch!");
     break;
   }
-
+  
+  clouds = new Clouds(intensity);
   wind = new Wind(weather.windSpeed);
 
   // START AEC
-  aec = new AEC();
   aec.init();
   start = false;
 }
@@ -190,7 +188,7 @@ void draw() {
   weather.mainWeather = "Clouds";
   weather.description = "overcast clouds: 85-100%";
 
-// ------------------------------------- DRAW BACKGROUND -----------------------------------------------
+// DRAW BACKGROUND --------------------------------------------------------------------
 
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
@@ -258,13 +256,13 @@ void draw() {
     }
   }
 
-// ------------------------------------- DRAW WEATHER ---------------------------------------------
+// DRAW WEATHER -----------------------------------------------------------------------------------
 
   condition.draw();
   wind.draw();
   clouds.draw();
 
-// -------------------------------------- DRAW TEXT -----------------------------------------------
+// DRAW TEXT --------------------------------------------------------------------------------------
   noStroke();
   fill(255, 255, 255);
   float frameInterval = 2.5;
