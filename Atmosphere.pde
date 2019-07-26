@@ -10,20 +10,14 @@ abstract class Atmosphere implements WeatherCondition {
   boolean bad;
   boolean cover;
 
-  Atmosphere(float severity, color c, boolean bad, boolean cover) {
+  Atmosphere(float severity, color c, boolean cover) {
     this.severity = severity;
     this.c = c;
-    this.bad = bad;
     this.cover = cover;
   }
 
   void draw() {
-    if (bad) {
-      background(#A7C7D8);
-      //background(#CCD8DE);
-    } else {
-      background(#A7C7D8);
-    }
+    background(#A7C7D8);
     for (int h = 0; h < height; h += pixelSize) {
       for (int w = 0; w < width; w += pixelSize) {
         int alpha;
@@ -42,7 +36,7 @@ abstract class Atmosphere implements WeatherCondition {
 
 class Mist extends Atmosphere {
   Mist() {
-    super(0.2, #FFFFFF, false, true);
+    super(0.2, #FFFFFF, true);
   }
 
   @Override
@@ -62,36 +56,36 @@ class Mist extends Atmosphere {
 
 class Fog extends Atmosphere {
   Fog() {
-    super(0.7, #FFFFFF, false, false);
+    super(0.7, #FFFFFF, false);
   }
 }
 
 class Smoke extends Atmosphere {
   Smoke() {
-    super(1, #857A71, true, true);
+    super(1, #857A71, true);
   }
 }
 
 class Haze extends Atmosphere {
   Haze() {
-    super(0.2, #B5821B, false, true);
+    super(0.2, #B5821B, true);
   }
 }
 
 class Dust extends Atmosphere {
   Dust() {
-    super(0.4, #AEA799, false, false);
+    super(0.4, #AEA799, false);
   }
 }
 
 class Ash extends Atmosphere {
   Ash() {
-    super(0.7, #979797, true, false);
+    super(0.7, #979797, false);
   }
 }
 
 class Sand extends Atmosphere {
   Sand() {
-    super(1, #E0B040, true, false);
+    super(1, #E0B040, false);
   }
 }
