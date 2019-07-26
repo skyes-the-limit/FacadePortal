@@ -39,10 +39,13 @@ String description;
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr",
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
+
+HashMap<String, String> german = new HashMap();
+HashMap<String, String> skyscrapers = new HashMap();
 
 boolean start = true;
 
@@ -56,11 +59,11 @@ void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 9, false);
-  JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
+   JSONObject json = loadJSONObject(BASE_API_URL + "Wein"/*cities[city]*/  + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
   clear = new Clear();
-  clouds = new Clouds(1);
+  clouds = new Clouds(10);
   drizzle = new Drizzle();
   rain = new Rain();
   thunderstorm = new Thunderstorm(rain);
@@ -80,6 +83,21 @@ void setup() {
   aec.init();
   description = "";
   start = false;
+
+  german.add("Tokyo", "Tokio");
+  german.add("Beijing", "Peking");
+  german.add("Geneva", "Genf");
+  german.add("Mexico City", "Mexiko-Stadt");
+  german.add("Moscow", "Moskau");
+  german.add("New Delhi", "Neu-Delhi");
+  german.add("Panama City", "Panama-Stadt");
+  german.add("Reykjavik", "Reykjavík");
+  german.add("Athens", "Athen");
+  german.add("Marrakesh", "Marrakesch");
+  german.add("Cape Town", "Kapstadt");
+  german.add("Tel Aviv", "Tel Aviv-Jaffa");
+  german.add("Cairo", "Kairo");
+  german.add("Hong Kong", "Hongkong");
 }
 
 void draw() {
@@ -195,19 +213,19 @@ void draw() {
   float frameInterval = 3;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
-    case "Mist":
-    case "Smoke":
-    case "Haze":
-    case "Dust":
-    case "Fog":
-    case "Sand":
-    case "Ash":
-      frameInterval = 0.5;
-      break;
+  case "Mist":
+  case "Smoke":
+  case "Haze":
+  case "Dust":
+  case "Fog":
+  case "Sand":
+  case "Ash":
+    frameInterval = 0.5;
+    break;
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
-  int minPos = -220;
+  int minPos = -200;
   int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
 
