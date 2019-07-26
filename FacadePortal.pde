@@ -1,7 +1,16 @@
+/*
+Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
+Creative Coding - Summer 2 2019
+
+REFERENCES:
+  https://openweathermap.org/weather-conditions
+  https://openweathermap.org/current#current_JSON
+*/
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.Objects;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
@@ -16,6 +25,7 @@ static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
 Weather weather;
+WeatherCondition condition;
 Clear clear;
 Clouds clouds;
 Drizzle drizzle;
@@ -37,53 +47,126 @@ Buildings buildings;
 
 ArrayList<PVector> stars = new ArrayList<PVector>();
 
-String description;
+String description = "";
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva, fr", 
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
+HashMap<String, String> german = new HashMap();
+HashMap<String, String> skyscrapers = new HashMap();
 
 boolean start = true;
 
+color textColor = #FF0000;
+
 void setup() {
+  // BASIC SETUP
+  colorMode(RGB);
+  frameRate(25);
+  size(1200, 400);
+  font = createFont("FreePixel.ttf", 10, false);
+  aec = new AEC();
+
+  // POPULATE STARS, GERMAN, & SKYSCRAPERS ------------------------------------------------
   for (int i = 0; i <= 65; i++) {
     stars.add(new PVector(random(width / 4), random(height / 12)));
   }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
-  frameRate(23);
-  size(1200, 400);
-  font = createFont("FreePixel.ttf", 10, false);
+  german.put("Tokyo", "Tokio");
+  german.put("Beijing", "Peking");
+  german.put("Geneva", "Genf");
+  german.put("Mexico City", "Mexiko-Stadt");
+  german.put("Moscow", "Moskau");
+  german.put("New Delhi", "Neu-Delhi");
+  german.put("Panama City", "Panama-Stadt");
+  german.put("Reykjavik", "Reykjavík");
+  german.put("Athens", "Athen");
+  german.put("Marrakesh", "Marrakesch");
+  german.put("Cape Town", "Kapstadt");
+  german.put("Tel Aviv", "Tel Aviv-Jaffa");
+  german.put("Cairo", "Kairo");
+  german.put("Hong Kong", "Hongkong");
+
+  // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
+  int intensity = weather.intensity;
+  WeatherCondition condition = null;
+  Clouds clouds = new Clouds(0);
+  switch (weather.mainWeather) {
+  case "Clouds":
+    clouds = new Clouds(weather.intensity);
+  case "Clear":
+    condition = new Clear();
+    break;
+  case "Drizzle":
+    condition = new Drizzle(weather.intensity);
+    clouds = new Clouds(weather.intensity);
+    break;
+  case "Rain":
+    condition = new Rain(weather.intensity);
+    clouds = new Clouds(weather.intensity);
+    break;
+  case "Thunderstorm":
+    condition = new Thunderstorm(weather.intensity);
+    clouds = new Clouds(weather.intensity);
+    break;
+  case "Snow":
+    condition = new Snow(weather.intensity);
+    clouds = new Clouds(weather.intensity);
+    break;
+  case "Mist":
+    condition = new Mist();
+    textColor = #000000;
+    break;
+  case "Smoke":
+    condition = new Smoke();
+    textColor = #000000;
+    break;
+  case "Haze":
+    condition = new Haze();
+    textColor = #000000;
+    break;
+  case "Dust":
+    condition = new Dust();
+    textColor = #000000;
+    break;
+  case "Fog":
+    condition = new Fog();
+    textColor = #000000;
+    break;
+  case "Sand":
+    condition = new Sand();
+    textColor = #000000;
+    break;
+  case "Ash":
+    condition = new Ash();
+    textColor = #000000;
+    break;
+  case "Squall":
+    condition = new Squall();
+    break;
+  case "Tornado":
+    condition = new Tornado();
+    break;
+  default:
+    println("WARN: hit default on main weather switch!");
+    break;
+  }
 
-  clear = new Clear();
-  clouds = new Clouds(1);
-  drizzle = new Drizzle();
-  rain = new Rain();
-  thunderstorm = new Thunderstorm(rain);
-  snow = new Snow();
-  mist = new Mist();
-  smoke = new Smoke();
-  haze = new Haze();
-  dust = new Dust();
-  fog = new Fog();
-  sand = new Sand();
-  ash = new Ash();
-  squall = new Squall();
-  tornado = new Tornado();
+  clouds = new Clouds(intensity);
   wind = new Wind(weather.windSpeed);
-
   buildings = new Buildings(20, height / 3);
-  aec = new AEC();
+
+  // START AEC
   aec.init();
-  description = "";
   start = false;
 }
 
@@ -91,9 +174,13 @@ void draw() {
   aec.beginDraw();
 
   color cloudColor = #FFFFFF;
-  color textColor;
 
-  colorMode(RGB);
+  //weather.mainWeather = "Mist";
+  weather.mainWeather = "Clouds";
+  weather.description = "overcast clouds: 85-100%";
+
+// DRAW BACKGROUND --------------------------------------------------------------------
+
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -103,7 +190,9 @@ void draw() {
     color c4 = #FFFFCE;
     color c5 = #FFC78A;
     color c6 = #FFC78A;
-    textColor = #000000;
+    if (textColor == #FF0000) {
+      textColor = #000000;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
@@ -111,95 +200,63 @@ void draw() {
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
-    textColor = #FFFFFF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
-    color c1 = color(8, 23, 66);
-    color c2 = color(36, 23, 81);
-    color c3 = color(20, 36, 107);
-    textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3);
-    for (PVector star : stars) {
+    color c1 = #001639;
+    color c2 = #1F007A;
+    cloudColor = #DFDFDF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
+    for (int i = 0; i < stars.size(); i++) {
+      PVector star = stars.get(i);
       noStroke();
-      fill(255, 170);
+      int alpha = 170 + round(sin(((frameCount / 5) + i) % 360) * 80);
+      fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    color c1 = color(114, 173, 214);
-    color c2 = color(177, 211, 245);
-    color c3 = color(202, 231, 255);
-    textColor = #000000;
-    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3);
+    if (weather.intensity >= 40) {
+      color c1 = #9BBED7;
+      color c2 = #DCDCDC;
+      cloudColor = #DFDFDF;
+      if (textColor == #FF0000) {
+        textColor = #000000;
+      }
+      setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
+    } else {
+      color c1 = #0082DB;
+      color c2 = #ADDEFF;
+      cloudColor = #DFDFDF;
+      if (textColor == #FF0000) {
+        textColor = #000000;
+      }
+      setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
+    }
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
-    textColor = #000000;
+    if (textColor == #FF0000) {
+      textColor = #000000;
+    }
   }
 
+// DRAW WEATHER -----------------------------------------------------------------------------------
+
+  condition.draw();
   buildings.draw();
-
-  //weather.mainWeather = "Fog";
-  // cases for main weather: https://openweathermap.org/weather-conditions
-  switch(weather.mainWeather) {
-  case "Clear":
-    clear.draw();
-    break;
-  case "Clouds":
-    clouds.draw(color(cloudColor, 210));
-    break;
-  case "Drizzle":
-    drizzle.draw();
-    break;
-  case "Rain":
-    rain.draw();
-    break;
-  case "Thunderstorm":
-    thunderstorm.draw();
-    break;
-  case "Snow":
-    snow.draw();
-    break;
-  case "Mist":
-    mist.draw();
-    break;
-  case "Smoke":
-    smoke.draw();
-    break;
-  case "Haze":
-    haze.draw();
-    break;
-  case "Dust":
-    dust.draw();
-    break;
-  case "Fog":
-    fog.draw();
-    break;
-  case "Sand":
-    sand.draw();
-    break;
-  case "Ash":
-    ash.draw();
-    break;
-  case "Squall":
-    squall.draw();
-    break;
-  case "Tornado":
-    tornado.draw();
-    break;
-  default:
-    println("WARN: hit default on main weather switch!");
-    break;
-  }
-
   wind.draw();
-  buildings.draw();
+  clouds.draw();
 
+// DRAW TEXT --------------------------------------------------------------------------------------
   noStroke();
-
   fill(255, 255, 255);
-
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
@@ -215,7 +272,7 @@ void draw() {
   }
 
   // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
-  int minPos = -220;
+  int minPos = -200;
   int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
 
@@ -251,18 +308,15 @@ void displayText(int x, int y, color c) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  ZoneOffset zone = ZoneOffset.ofTotalSeconds(weather.tz);
-  OffsetTime time = OffsetTime.now(zone);
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-  String timeStr = time.format(formatter);
-  description = weather.city + " " + convertTemp(weather.temp);
+  String city = german.get(weather.city);
+  if (Objects.isNull(city)) {
+    city = weather.city;
+  }
+  description = city + " " + convertTemp(weather.temp);
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
-      //fill(0);
-      //rect(i*3, - FONT_SIZE + 1.6, FONT_SIZE, FONT_SIZE - 0.2);
-      //fill(255);
       text(description.charAt(i), (float) i*3, 0);
     }
   }

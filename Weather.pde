@@ -1,28 +1,43 @@
-// SOURCE: https://openweathermap.org/current#current_JSON
-
 public class Weather {
   final String city;
   final String country;
   final double latitude;
   String mainWeather;  // Rain, Snow, Extreme, etc.
+  String description; // Intensity of weather
   int windSpeed;       // meter/sec
   final long sunrise;        // seconds UTC
   final long sunset;         // seconds UTC
   final long dt;             // seconds UTC
   final int tz;       // shift in seconds from UTC
   final double temp;
+  final int intensity;
 
   Weather(JSONObject json) {
     this.city = json.getString("name");
     this.country = json.getJSONObject("sys").getString("country");
     this.latitude = json.getJSONObject("coord").getDouble("lat");
     this.mainWeather = json.getJSONArray("weather").getJSONObject(0).getString("main");
+    this.description = json.getJSONArray("weather").getJSONObject(0).getString("description");
     this.windSpeed = json.getJSONObject("wind").getInt("speed");
     this.sunrise = json.getJSONObject("sys").getLong("sunrise");
     this.sunset = json.getJSONObject("sys").getLong("sunset");
     this.dt = json.getLong("dt");
     this.tz = json.getInt("timezone");
     this.temp = json.getJSONObject("main").getDouble("temp");
+    this.intensity = parseDescription();
+  }
+  
+  int parseDescription() {
+    switch (mainWeather) {
+      case "Clouds":
+      case "Drizzle":
+      case "Rain":
+      case "Snow":
+      case "Thunderstorm":
+      default:
+      
+    }
+    return 0;
   }
 }
 

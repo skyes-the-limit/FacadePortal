@@ -1,4 +1,4 @@
-class Clouds {
+class Clouds implements WeatherCondition {
   ArrayList<Cloud> clouds;
   int density;
   int tick;
@@ -12,17 +12,19 @@ class Clouds {
 
   void genClouds(boolean start) {
     int genNum;
+    int genRange;
     if (start) {
       genNum = density;
+      genRange = width - 400;
+    } else if (tick % 50 == 0) {
+      genNum = round(density * 0.1);
+      genRange = 100;
     } else {
-      if (tick % 50 == 0) {
-        genNum = round(density * 0.5);
-      } else {
-        genNum = 0;
-      }
+      genNum = 0;
+      genRange = 0;
     }
     for (int i = 0; i < genNum; i++) {
-      this.clouds.add(new Cloud(new PVector(random(1, 2), 0), new PVector(random(width - 400) - 200, random(height - 200))));
+      this.clouds.add(new Cloud(new PVector(random(1, 2), 0), new PVector(random(genRange) - 200, random(height - 325))));
     }
   }
 
@@ -36,10 +38,10 @@ class Clouds {
     this.clouds.removeAll(toRemove);
   }
 
-  void draw(color c) {
+  void draw() {
     this.genClouds(false);
     for (Cloud cloud : clouds) {
-      cloud.drawCloud(c);
+      cloud.drawCloud();
       cloud.update();
     }
     this.remClouds();
@@ -66,9 +68,9 @@ class Cloud {
   }
 
   // draws this drop
-  void drawCloud(color c) {
+  void drawCloud() {
     noStroke();
-    fill(c); //color(#DFDFDF, 100)
+    fill(#FFFFFF); //color(#DFDFDF, 100)
     ellipse(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), size, size);
   }
 }

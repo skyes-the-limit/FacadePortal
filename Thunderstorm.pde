@@ -7,6 +7,10 @@ class Thunderstorm implements WeatherCondition {
   int count = 0;
   int add = 3;
   int max = 80;
+  
+  Thunderstorm(int intensity) {
+    this.precipitation = new Rain(intensity);
+  }
 
   Thunderstorm(APrecipitation precipitation) {
     this.precipitation = precipitation;
