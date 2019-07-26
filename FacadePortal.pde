@@ -384,12 +384,6 @@ void setGradient(int x, int y, float w, float h, int axis, color ... colors) {
   }
 }
 
-String convertTime(long time) {
-  Date date = new Date(time);
-  Format format = new SimpleDateFormat("HH:mm");
-  return format.format(date);
-}
-
 String convertTemp(double temp) {
   return (int) (temp - 273.15) + "°C";
 }
