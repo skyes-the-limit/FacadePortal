@@ -85,7 +85,7 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-  color cloudColor;
+  color cloudColor = #FFFFFF;
   color textColor;
   
   colorMode(RGB);
@@ -98,7 +98,6 @@ void draw() {
     color c4 = #FFFFCE;
     color c5 = #FFC78A;
     color c6 = #FFC78A;
-    cloudColor = #FFFFFF;
     textColor = #000000;
     setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
@@ -107,7 +106,6 @@ void draw() {
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
-    cloudColor = #FFFFFF;
     textColor = #FFFFFF;
     setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
@@ -115,7 +113,6 @@ void draw() {
     color c1 = color(8, 23, 66);
     color c2 = color(36, 23, 81);
     color c3 = color(20, 36, 107);
-    cloudColor = #DFDFDF;
     textColor = #FFFFFF;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
     for (PVector star : stars) {
@@ -128,13 +125,11 @@ void draw() {
     color c1 = color(114, 173, 214);
     color c2 = color(177, 211, 245);
     color c3 = color(202, 231, 255);
-    cloudColor = #DFDFDF;
     textColor = #000000;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
-    cloudColor = #DFDFDF;
     textColor = #000000;
   }
 
