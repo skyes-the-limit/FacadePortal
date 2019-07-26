@@ -13,8 +13,6 @@ public class Weather {
   final double temp;
 
   Weather(JSONObject json) {
-    println(json.toString());
-
     this.city = json.getString("name");
     this.country = json.getJSONObject("sys").getString("country");
     this.latitude = json.getJSONObject("coord").getDouble("lat");

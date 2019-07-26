@@ -6,7 +6,7 @@ import java.util.Arrays;
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
-static final int SUN_THRESHOLD = 300;
+static final int SUN_THRESHOLD = 2700;
 AEC aec;
 PFont font;
 
