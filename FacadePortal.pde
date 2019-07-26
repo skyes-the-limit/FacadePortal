@@ -6,6 +6,7 @@ REFERENCES:
   https://openweathermap.org/weather-conditions
   https://openweathermap.org/current#current_JSON
 */
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -68,6 +69,8 @@ void setup() {
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
   aec = new AEC();
+  aec.init();
+  start = false;
 
   // POPULATE STARS, GERMAN, & SKYSCRAPERS ------------------------------------------------
   for (int i = 0; i <= 65; i++) {
@@ -94,10 +97,8 @@ void setup() {
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
-
-  int intensity = weather.intensity;
-  WeatherCondition condition = null;
-  Clouds clouds = new Clouds(0);
+  wind = new Wind(weather.windSpeed);
+  
   switch (weather.mainWeather) {
   case "Clouds":
     clouds = new Clouds(weather.intensity);
@@ -158,26 +159,12 @@ void setup() {
     println("WARN: hit default on main weather switch!");
     break;
   }
-
-  clouds = new Clouds(intensity);
-  wind = new Wind(weather.windSpeed);
-
-  // START AEC
-  aec.init();
-  start = false;
 }
 
 void draw() {
   aec.beginDraw();
 
-  color cloudColor = #FFFFFF;
-
-  //weather.mainWeather = "Mist";
-  weather.mainWeather = "Clouds";
-  weather.description = "overcast clouds: 85-100%";
-
 // DRAW BACKGROUND --------------------------------------------------------------------
-
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -191,8 +178,7 @@ void draw() {
       textColor = #000000;
     }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4, c5, c6);
-  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
-    // SUNSET
+  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) { // SUNSET
     color c1 = color(34, 1, 78);
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
@@ -201,11 +187,9 @@ void draw() {
       textColor = #FFFFFF;
     }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
-  } else if (now < weather.sunrise || now > weather.sunset) {
-    //NIGHT
+  } else if (now < weather.sunrise || now > weather.sunset) { // NIGHT
     color c1 = #001639;
     color c2 = #1F007A;
-    cloudColor = #DFDFDF;
     if (textColor == #FF0000) {
       textColor = #FFFFFF;
     }
@@ -217,20 +201,17 @@ void draw() {
       fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
-  } else if (now > weather.sunrise && now < weather.sunset) {
-    // DAY
-    if (weather.intensity >= 40) {
+  } else if (now > weather.sunrise && now < weather.sunset) { // DAY
+    if (weather.intensity >= 40) { // OVERCAST / HEAVY CLOUDS
       color c1 = #9BBED7;
       color c2 = #DCDCDC;
-      cloudColor = #DFDFDF;
       if (textColor == #FF0000) {
         textColor = #000000;
       }
       setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
-    } else {
+    } else { // CLEAR
       color c1 = #0082DB;
       color c2 = #ADDEFF;
-      cloudColor = #DFDFDF;
       if (textColor == #FF0000) {
         textColor = #000000;
       }
@@ -245,7 +226,6 @@ void draw() {
   }
 
 // DRAW WEATHER -----------------------------------------------------------------------------------
-
   condition.draw();
   wind.draw();
   clouds.draw();
@@ -255,32 +235,21 @@ void draw() {
   fill(255, 255, 255);
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
-  switch(weather.mainWeather) {
-  case "Mist":
-  case "Smoke":
-  case "Haze":
-  case "Dust":
-  case "Fog":
-  case "Sand":
-  case "Ash":
+  if (Arrays.asList("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Ash").contains(weather.mainWeather)) {
     frameInterval = 0.5;
-    break;
   }
 
-  // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
   int minPos = -200;
   int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
-
-  // vertical grid pos
   int yPos = 15;
-
   int xPos = max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval));
   displayText(xPos, yPos, textColor);
 
   aec.endDraw();
   aec.drawSides();
 
+// TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
   if (xPos <= minPos + 10) {
     city++;
     if (city >= cities.length) {
@@ -294,12 +263,8 @@ void draw() {
 void displayText(int x, int y, color c) {
   noStroke();
   fill(c);
-
-  // push & translate to the text origin
   pushMatrix();
   translate(x, y + FONT_OFFSET_Y);
-
-  // scale the font up by fixed paramteres so it fits our grid
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
   textSize(FONT_SIZE);
@@ -309,8 +274,6 @@ void displayText(int x, int y, color c) {
     city = weather.city;
   }
   description = city + " " + convertTemp(weather.temp);
-
-  // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
       text(description.charAt(i), (float) i*3, 0);
