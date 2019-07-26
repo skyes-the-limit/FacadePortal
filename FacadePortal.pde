@@ -47,15 +47,15 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 boolean start = true;
 
 void setup() {
-  for (int i = 0; i <= 100; i++) {
-    stars.add(new PVector(random(width*0.4), random(height / 12)));
+  for (int i = 0; i <= 65; i++) {
+    stars.add(new PVector(random(width / 4), random(height / 12)));
   }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
   frameRate(25);
   size(1200, 400);
-  font = createFont("FreePixel.ttf", 9, false);
+  font = createFont("FreePixel.ttf", 10, false);
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
@@ -100,7 +100,7 @@ void draw() {
     color c6 = #FFC78A;
     cloudColor = #FFFFFF;
     textColor = #000000;
-    setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
     color c1 = color(34, 1, 78);
@@ -109,7 +109,7 @@ void draw() {
     color c4 = color(182, 75, 1);
     cloudColor = #FFFFFF;
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
@@ -117,10 +117,10 @@ void draw() {
     color c3 = color(20, 36, 107);
     cloudColor = #DFDFDF;
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3);
     for (PVector star : stars) {
       noStroke();
-      fill(255, 190);
+      fill(255, 170);
       rect(star.x, star.y, 0.7, 1);
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
@@ -130,7 +130,7 @@ void draw() {
     color c3 = color(202, 231, 255);
     cloudColor = #DFDFDF;
     textColor = #000000;
-    setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
@@ -197,7 +197,7 @@ void draw() {
 
   fill(255, 255, 255);
 
-  float frameInterval = 3;
+  float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
     case "Mist":
