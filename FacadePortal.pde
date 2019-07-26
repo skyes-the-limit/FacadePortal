@@ -309,7 +309,6 @@ int Y_AXIS = 1;
 int X_AXIS = 2;
 
 void setGradient(int x, int y, float w, float h, int axis, color ... colors) {
-
   noFill();
   int div = colors.length - 1;
   if (axis == Y_AXIS) {  // Top to bottom gradient
