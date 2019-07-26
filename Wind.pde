@@ -1,22 +1,22 @@
 final float MIN_X_POS = width * -0.1;
-final float MAX_X_POS = width * 0.4;
-final float MIN_Y_POS = 0;
+final float MAX_X_POS = width * 0.45;
+final float MIN_Y_POS = -0.1;
 final float MAX_Y_POS = height * 0.3;
 
 abstract class AWind implements WeatherCondition {
-  int lifespan;
-  int frequency;
-  int strokeLength;
-  int speed;
-  color strokeColor;
+  int lifespan;        // how many ticks a single windstroke lives for
+  int frequency;       // how often a new windstroke is spawned
+  int strokeSize;      // how large a single windstroke is drawn
+  int speed;           // how many ticks until a windstroke is moved
+  color strokeColor;   // the color to draw a windstroke
 
   private ArrayList<WindStroke> strokes = new ArrayList();  
 
-  AWind(int lifespan, int frequency, int strokeLength, int speed, color strokeColor) {
-    this.lifespan = lifespan;
-    this.frequency = frequency;
-    this.strokeLength = strokeLength;
-    this.speed = speed;
+  AWind(int intensity, color strokeColor) {
+    this.lifespan = round(intensity * 1.5);
+    this.frequency = 8 - intensity; 
+    this.strokeSize = intensity;
+    this.speed = 14 - (intensity * 2);
     this.strokeColor = strokeColor;
   }
 
@@ -24,9 +24,7 @@ abstract class AWind implements WeatherCondition {
     if (frameCount % this.frequency == 0) {
       float x = map((float) Math.random(), 0, 1, MIN_X_POS, MAX_X_POS);
       float y = map((float) Math.random(), 0, 1, MIN_Y_POS, MAX_Y_POS); 
-      float dx = speed;
-      float dy = 1;
-      this.strokes.add(new WindStroke(x, y, dx, dy));
+      this.strokes.add(new WindStroke(x, y, 1, 1));
     }
 
     fill(this.strokeColor);  
@@ -38,12 +36,12 @@ abstract class AWind implements WeatherCondition {
         strokes.remove(stroke);
         i--;
       } else {
-        if (frameCount % 2 == 0) {
+        if (frameCount % speed == 0) {
           stroke.progress();
         }
         noStroke();
         fill(this.strokeColor);
-        for (int j = 0; j < this.strokeLength; j++) {
+        for (int j = 0; j < this.strokeSize; j++) {
           if (j % 2 == 0) {
             rect(x + j, y, 1, 1);  
           } else {
@@ -74,13 +72,13 @@ class WindStroke {
 
 class Wind extends AWind {
   Wind(int windSpeed) {
-    super(8, 3, ceil(windSpeed / 4.0) * 2, 1, color(255, 255, 255, 200));
+    super(ceil(windSpeed / 4.0) * 2, color(255, 255, 255, 200));
   }
 }
 
 class Squall extends AWind {
   Squall() {
-    super(30, 15, 6, 3, color(150, 150, 150, 220));
+    super(6, color(150, 150, 150, 220));
   }
 
   void draw() {
@@ -89,6 +87,6 @@ class Squall extends AWind {
 
 class Tornado extends AWind {
   Tornado() {
-    super(50, 1, 12, 3, color(99, 99, 99, 240));
+    super(12, color(99, 99, 99, 240));
   }
 }
