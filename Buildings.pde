@@ -1,5 +1,6 @@
 // to represent a cityscape
 class Buildings {
+  final static int highDens = 10;
   final static int maxWidth = 50;
   int density;
   int maxHeight;
@@ -11,6 +12,8 @@ class Buildings {
     this.bounds = new ArrayList<float[]>();
     this.genBuildings();
   }
+  
+  
 
   void genBuildings() {
     float currentX = 0;
@@ -20,14 +23,14 @@ class Buildings {
       float[] bound = new float[] { currentX, bHeight, bWidth };
       bounds.add(bound);
       currentX += bWidth;
-      float space = max(0, random(-density / 4, density));
+      float space = max(0, random(map(density, 0, 70, -15, -3), density));
       currentX += space;
     }
   }
 
   void draw() {
     noStroke();
-    fill(10, 220);
+    fill(20, 200);
     for ( float[] bound : bounds) {
       rect(bound[0] / aec.getScaleX(), height / 14 - bound[1] / aec.getScaleY(), bound[2] / aec.getScaleX(), bound[1] / aec.getScaleY());
     }
