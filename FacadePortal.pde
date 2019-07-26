@@ -1,3 +1,11 @@
+/*
+Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
+Creative Coding - Summer 2 2019
+
+REFERENCES:
+  https://openweathermap.org/weather-conditions
+  https://openweathermap.org/current#current_JSON
+*/
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -7,8 +15,8 @@ static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weath
 static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 2700;
-AEC aec;
-PFont font;
+static final AEC aec;
+static final PFont font = createFont("FreePixel.ttf", 10, false);
 
 static final float FONT_SIZE = 6;
 static final float FONT_OFFSET_Y = 0.12;
@@ -16,6 +24,7 @@ static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
 Weather weather;
+WeatherCondition condition;
 Clear clear;
 Clouds clouds;
 Drizzle drizzle;
@@ -35,7 +44,7 @@ Wind wind;
 
 ArrayList<PVector> stars = new ArrayList<PVector>();
 
-String description;
+String description = "";
 
 int city = 0;
 
@@ -43,22 +52,42 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
   "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
   "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
-
+  
 HashMap<String, String> german = new HashMap();
+  german.put("Tokyo", "Tokio");
+  german.put("Beijing", "Peking");
+  german.put("Geneva", "Genf");
+  german.put("Mexico City", "Mexiko-Stadt");
+  german.put("Moscow", "Moskau");
+  german.put("New Delhi", "Neu-Delhi");
+  german.put("Panama City", "Panama-Stadt");
+  german.put("Reykjavik", "Reykjavík");
+  german.put("Athens", "Athen");
+  german.put("Marrakesh", "Marrakesch");
+  german.put("Cape Town", "Kapstadt");
+  german.put("Tel Aviv", "Tel Aviv-Jaffa");
+  german.put("Cairo", "Kairo");
+  german.put("Hong Kong", "Hongkong");
+  
 HashMap<String, String> skyscrapers = new HashMap();
 
 boolean start = true;
 
 void setup() {
+  // BASIC SETUP
+  colorMode(RGB);
+  frameRate(25);
+  size(1200, 400);
+  
+  // POPULATE STARS
   for (int i = 0; i <= 65; i++) {
     stars.add(new PVector(random(width / 4), random(height / 12)));
   }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
-  frameRate(25);
-  size(1200, 400);
-  font = createFont("FreePixel.ttf", 10, false);
+
+  // LOAD WEATHER CONDITION FOR CITY
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
@@ -79,25 +108,10 @@ void setup() {
   tornado = new Tornado();
   wind = new Wind(weather.windSpeed);
 
+  // START AEC
   aec = new AEC();
   aec.init();
-  description = "";
   start = false;
-
-  german.put("Tokyo", "Tokio");
-  german.put("Beijing", "Peking");
-  german.put("Geneva", "Genf");
-  german.put("Mexico City", "Mexiko-Stadt");
-  german.put("Moscow", "Moskau");
-  german.put("New Delhi", "Neu-Delhi");
-  german.put("Panama City", "Panama-Stadt");
-  german.put("Reykjavik", "Reykjavík");
-  german.put("Athens", "Athen");
-  german.put("Marrakesh", "Marrakesch");
-  german.put("Cape Town", "Kapstadt");
-  german.put("Tel Aviv", "Tel Aviv-Jaffa");
-  german.put("Cairo", "Kairo");
-  german.put("Hong Kong", "Hongkong");
 }
 
 void draw() {
@@ -106,7 +120,8 @@ void draw() {
   color cloudColor = #FFFFFF;
   color textColor;
 
-  colorMode(RGB);
+// ------------------------------------- DRAW BACKGROUND -----------------------------------------------
+
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -152,65 +167,16 @@ void draw() {
     background(0);
     textColor = #000000;
   }
+  
+// ------------------------------------- DRAW WEATHER ---------------------------------------------
 
-  // cases for main weather: https://openweathermap.org/weather-conditions
-  switch(weather.mainWeather) {
-  case "Clear":
-    clear.draw();
-    break;
-  case "Clouds":
-    clouds.draw(color(cloudColor, 210));
-    break;
-  case "Drizzle":
-    drizzle.draw();
-    break;
-  case "Rain":
-    rain.draw();
-    break;
-  case "Thunderstorm":
-    thunderstorm.draw();
-    break;
-  case "Snow":
-    snow.draw();
-    break;
-  case "Mist":
-    mist.draw();
-    break;
-  case "Smoke":
-    smoke.draw();
-    break;
-  case "Haze":
-    haze.draw();
-    break;
-  case "Dust":
-    dust.draw();
-    break;
-  case "Fog":
-    fog.draw();
-    break;
-  case "Sand":
-    sand.draw();
-    break;
-  case "Ash":
-    ash.draw();
-    break;
-  case "Squall":
-    squall.draw();
-    break;
-  case "Tornado":
-    tornado.draw();
-    break;
-  default:
-    println("WARN: hit default on main weather switch!");
-    break;
-  }
-
+  condition.draw();
   wind.draw();
-
+  clouds.draw();
+  
+// -------------------------------------- DRAW TEXT -----------------------------------------------
   noStroke();
-
   fill(255, 255, 255);
-
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
@@ -271,9 +237,6 @@ void displayText(int x, int y, color c) {
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
-      //fill(0);
-      //rect(i*3, - FONT_SIZE + 1.6, FONT_SIZE, FONT_SIZE - 0.2);
-      //fill(255);
       text(description.charAt(i), (float) i*3, 0);
     }
   }

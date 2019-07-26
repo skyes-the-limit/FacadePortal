@@ -1,5 +1,3 @@
-// SOURCE: https://openweathermap.org/current#current_JSON
-
 public class Weather {
   final String city;
   final String country;
