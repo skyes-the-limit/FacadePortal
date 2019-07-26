@@ -74,13 +74,13 @@ class WindStroke {
 
 class Wind extends AWind {
   Wind(int windSpeed) {
-    super(8, 3, ceil(windSpeed / 4.0) * 2, 1, color(255, 255, 255, 120));
+    super(8, 3, ceil(windSpeed / 4.0) * 2, 1, color(255, 255, 255, 200));
   }
 }
 
 class Squall extends AWind {
   Squall() {
-    super(30, 15, 6, 3, color(150, 150, 150, 160));
+    super(30, 15, 6, 3, color(150, 150, 150, 220));
   }
 
   void draw() {
@@ -89,6 +89,6 @@ class Squall extends AWind {
 
 class Tornado extends AWind {
   Tornado() {
-    super(50, 1, 12, 3, color(99, 99, 99, 200));
+    super(50, 1, 12, 3, color(99, 99, 99, 240));
   }
 }
