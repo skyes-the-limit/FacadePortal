@@ -65,45 +65,30 @@ void setup() {
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
-  int intensity;
+  int intensity = weather.intensity;
   WeatherCondition condition = null;
   Clouds clouds = new Clouds(0);
   switch (weather.mainWeather) {
   case "Clouds":
-    switch (description) {
-      
-    }
-    clouds = new Clouds(intensity);
+    clouds = new Clouds(weather.intensity);
   case "Clear":
     condition = new Clear();
     break;
   case "Drizzle":
-    switch (description) {
-      
-    }
-    condition = new Drizzle(intensity);
-    clouds = new Clouds(intensity);
+    condition = new Drizzle(weather.intensity);
+    clouds = new Clouds(weather.intensity);
     break;
   case "Rain":
-    switch (description) {
-      
-    }
-    condition = new Rain(intensity);
-    clouds = new Clouds(intensity);
+    condition = new Rain(weather.intensity);
+    clouds = new Clouds(weather.intensity);
     break;
   case "Thunderstorm":
-    switch (description) {
-      
-    }
-    condition = new Thunderstorm(intensity);
-    clouds = new Clouds(intensity);
+    condition = new Thunderstorm(weather.intensity);
+    clouds = new Clouds(weather.intensity);
     break;
   case "Snow":
-    switch (description) {
-      
-    }
-    condition = new Snow(intensity);
-    clouds = new Clouds(intensity);
+    condition = new Snow(weather.intensity);
+    clouds = new Clouds(weather.intensity);
     break;
   case "Mist":
     condition = new Mist();
@@ -218,7 +203,7 @@ void draw() {
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    if (weather.mainWeather.equals("Clouds") && weather.description.equals("overcast clouds: 85-100%")) {
+    if (weather.intensity >= 40) {
       color c1 = #9BBED7;
       color c2 = #DCDCDC;
       cloudColor = #DFDFDF;
