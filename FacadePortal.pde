@@ -44,6 +44,8 @@ Squall squall;
 Tornado tornado;
 Wind wind;
 
+Buildings buildings;
+
 ArrayList<PVector> stars = new ArrayList<PVector>();
 
 String description = "";
@@ -98,7 +100,7 @@ void setup() {
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
   wind = new Wind(weather.windSpeed);
-  
+
   switch (weather.mainWeather) {
   case "Clouds":
     clouds = new Clouds(weather.intensity);
@@ -227,6 +229,7 @@ void draw() {
 
 // DRAW WEATHER -----------------------------------------------------------------------------------
   condition.draw();
+  buildings.draw();
   wind.draw();
   clouds.draw();
 
