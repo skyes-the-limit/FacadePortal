@@ -316,10 +316,6 @@ void displayText(int x, int y, color c) {
   textFont(font);
   textSize(FONT_SIZE);
 
-  ZoneOffset zone = ZoneOffset.ofTotalSeconds(weather.tz);
-  OffsetTime time = OffsetTime.now(zone);
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-  String timeStr = time.format(formatter);
   String city = german.get(weather.city);
   if (Objects.isNull(city)) {
     city = weather.city;
