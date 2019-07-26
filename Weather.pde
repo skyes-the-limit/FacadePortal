@@ -10,6 +10,7 @@ public class Weather {
   final long dt;             // seconds UTC
   final int tz;       // shift in seconds from UTC
   final double temp;
+  final int intensity;
 
   Weather(JSONObject json) {
     this.city = json.getString("name");
@@ -23,6 +24,20 @@ public class Weather {
     this.dt = json.getLong("dt");
     this.tz = json.getInt("timezone");
     this.temp = json.getJSONObject("main").getDouble("temp");
+    this.intensity = parseDescription();
+  }
+  
+  int parseDescription() {
+    switch (mainWeather) {
+      case "Clouds":
+      case "Drizzle":
+      case "Rain":
+      case "Snow":
+      case "Thunderstorm":
+      default:
+      
+    }
+    return 0;
   }
 }
 
