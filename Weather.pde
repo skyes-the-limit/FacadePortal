@@ -5,6 +5,7 @@ public class Weather {
   final String country;
   final double latitude;
   String mainWeather;  // Rain, Snow, Extreme, etc.
+  String description; // Intensity of weather
   int windSpeed;       // meter/sec
   final long sunrise;        // seconds UTC
   final long sunset;         // seconds UTC
@@ -17,6 +18,7 @@ public class Weather {
     this.country = json.getJSONObject("sys").getString("country");
     this.latitude = json.getJSONObject("coord").getDouble("lat");
     this.mainWeather = json.getJSONArray("weather").getJSONObject(0).getString("main");
+    this.description = json.getJSONArray("weather").getJSONObject(0).getString("description");
     this.windSpeed = json.getJSONObject("wind").getInt("speed");
     this.sunrise = json.getJSONObject("sys").getLong("sunrise");
     this.sunset = json.getJSONObject("sys").getLong("sunset");
