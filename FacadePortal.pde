@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Arrays;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
-static final int SUN_THRESHOLD = 300;
+static final int SUN_THRESHOLD = 2700;
 AEC aec;
 PFont font;
 
@@ -85,25 +85,38 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
+  color cloudColor;
+  color textColor;
+
   colorMode(RGB);
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
-    color c1 = color(114, 173, 214);
-    color c2 = color(227, 121, 59);
-    color c3 = color(245, 30, 38);
-    setGradient(0, 0, width, height / 11, Y_AXIS, c1, c2, c3 );
+    //SUNRISE
+    color c1 = #9CD6FF;
+    color c2 = #9CD6FF;
+    color c3 = #CEEBFF;
+    color c4 = #FFFFCE;
+    color c5 = #FFC78A;
+    color c6 = #FFC78A;
+    cloudColor = #FFFFFF;
+    textColor = #000000;
+    setGradient(0, 0, width, height / 33, Y_AXIS, c1, c2, c3, c4, c5, c6);
   } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
     color c1 = color(34, 1, 78);
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
+    cloudColor = #FFFFFF;
+    textColor = #FFFFFF;
     setGradient(0, 0, width, height / 17, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
     //NIGHT
     color c1 = color(8, 23, 66);
     color c2 = color(36, 23, 81);
     color c3 = color(20, 36, 107);
+    cloudColor = #DFDFDF;
+    textColor = #FFFFFF;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
     for (PVector star : stars) {
       noStroke();
@@ -115,12 +128,16 @@ void draw() {
     color c1 = color(114, 173, 214);
     color c2 = color(177, 211, 245);
     color c3 = color(202, 231, 255);
+    cloudColor = #DFDFDF;
+    textColor = #000000;
     setGradient(0, 0, width, height / 13, Y_AXIS, c1, c2, c3);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
+    cloudColor = #DFDFDF;
+    textColor = #000000;
   }
-  
+
   //weather.mainWeather = "Fog";
   // cases for main weather: https://openweathermap.org/weather-conditions
   switch(weather.mainWeather) {
@@ -128,7 +145,7 @@ void draw() {
     clear.draw();
     break;
   case "Clouds":
-    clouds.draw(color(#DFDFDF, 210));
+    clouds.draw(color(cloudColor, 210));
     break;
   case "Drizzle":
     drizzle.draw();
@@ -203,7 +220,7 @@ void draw() {
   int yPos = 15;
 
   int xPos = max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval));
-  displayText(xPos, yPos);
+  displayText(xPos, yPos, textColor);
 
   aec.endDraw();
   aec.drawSides();
@@ -218,9 +235,9 @@ void draw() {
   }
 }
 
-void displayText(int x, int y) {
+void displayText(int x, int y, color c) {
   noStroke();
-  fill(255);
+  fill(c);
 
   // push & translate to the text origin
   pushMatrix();
@@ -235,11 +252,14 @@ void displayText(int x, int y) {
   OffsetTime time = OffsetTime.now(zone);
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
   String timeStr = time.format(formatter);
-  description = weather.city + " " + timeStr + " " + convertTemp(weather.temp) + " " + weather.mainWeather;
+  description = weather.city + " " + convertTemp(weather.temp);
 
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
+      //fill(0);
+      //rect(i*3, - FONT_SIZE + 1.6, FONT_SIZE, FONT_SIZE - 0.2);
+      //fill(255);
       text(description.charAt(i), (float) i*3, 0);
     }
   }
