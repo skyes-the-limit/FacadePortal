@@ -95,6 +95,8 @@ void setup() {
   german.put("Tel Aviv", "Tel Aviv-Jaffa");
   german.put("Cairo", "Kairo");
   german.put("Hong Kong", "Hongkong");
+  
+  skyscrapers.put("Tokyo, 
 
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
