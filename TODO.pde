@@ -16,3 +16,5 @@
 // extend time window to indicate sunset/sunrise
 // reduce radius of cloud
 // make sure all atmospheric effects will be high enough contrast with black text/day background or white text/night background
+// make cloud color always white and towards the top of the screen
+// add cloud effects to thunderstorm/rain/drizzle etc.
