@@ -1,3 +1,11 @@
+/*
+Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
+Creative Coding - Summer 2 2019
+
+REFERENCES:
+  https://openweathermap.org/weather-conditions
+  https://openweathermap.org/current#current_JSON
+*/
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -17,6 +25,7 @@ static final float FONT_SCALE_X = 2.669;
 static final float FONT_SCALE_Y = 2.67;
 
 Weather weather;
+WeatherCondition condition;
 Clear clear;
 Clouds clouds;
 Drizzle drizzle;
@@ -36,13 +45,13 @@ Wind wind;
 
 ArrayList<PVector> stars = new ArrayList<PVector>();
 
-String description;
+String description = "";
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
@@ -53,15 +62,36 @@ boolean start = true;
 color textColor = #FF0000;
 
 void setup() {
+  // BASIC SETUP
+  colorMode(RGB);
+  frameRate(25);
+  size(1200, 400);
+  font = createFont("FreePixel.ttf", 10, false);
+  aec = new AEC();
+
+  // POPULATE STARS, GERMAN, & SKYSCRAPERS ------------------------------------------------
   for (int i = 0; i <= 65; i++) {
     stars.add(new PVector(random(width / 4), random(height / 12)));
   }
   if (start) {
     Collections.shuffle(Arrays.asList(cities));
   }
-  frameRate(25);
-  size(1200, 400);
-  font = createFont("FreePixel.ttf", 10, false);
+  german.put("Tokyo", "Tokio");
+  german.put("Beijing", "Peking");
+  german.put("Geneva", "Genf");
+  german.put("Mexico City", "Mexiko-Stadt");
+  german.put("Moscow", "Moskau");
+  german.put("New Delhi", "Neu-Delhi");
+  german.put("Panama City", "Panama-Stadt");
+  german.put("Reykjavik", "Reykjavík");
+  german.put("Athens", "Athen");
+  german.put("Marrakesh", "Marrakesch");
+  german.put("Cape Town", "Kapstadt");
+  german.put("Tel Aviv", "Tel Aviv-Jaffa");
+  german.put("Cairo", "Kairo");
+  german.put("Hong Kong", "Hongkong");
+
+  // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
 
@@ -129,27 +159,12 @@ void setup() {
     break;
   }
 
+  clouds = new Clouds(intensity);
   wind = new Wind(weather.windSpeed);
 
-  aec = new AEC();
+  // START AEC
   aec.init();
-  description = "";
   start = false;
-
-  german.put("Tokyo", "Tokio");
-  german.put("Beijing", "Peking");
-  german.put("Geneva", "Genf");
-  german.put("Mexico City", "Mexiko-Stadt");
-  german.put("Moscow", "Moskau");
-  german.put("New Delhi", "Neu-Delhi");
-  german.put("Panama City", "Panama-Stadt");
-  german.put("Reykjavik", "Reykjavík");
-  german.put("Athens", "Athen");
-  german.put("Marrakesh", "Marrakesch");
-  german.put("Cape Town", "Kapstadt");
-  german.put("Tel Aviv", "Tel Aviv-Jaffa");
-  german.put("Cairo", "Kairo");
-  german.put("Hong Kong", "Hongkong");
 }
 
 void draw() {
@@ -161,7 +176,8 @@ void draw() {
   weather.mainWeather = "Clouds";
   weather.description = "overcast clouds: 85-100%";
 
-  colorMode(RGB);
+// DRAW BACKGROUND --------------------------------------------------------------------
+
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -228,75 +244,15 @@ void draw() {
     }
   }
 
-  // cases for main weather: https://openweathermap.org/weather-conditions
-  switch(weather.mainWeather) {
-  case "Clear":
-    clear.draw();
-    break;
-  case "Clouds":
-    clouds.draw(color(cloudColor, 210));
-    break;
-  case "Drizzle":
-    clouds.draw(color(cloudColor, 210));
-    drizzle.draw();
-    break;
-  case "Rain":
-    clouds.draw(color(cloudColor, 210));
-    rain.draw();
-    break;
-  case "Thunderstorm":
-    clouds.draw(color(cloudColor, 210));
-    thunderstorm.draw();
-    break;
-  case "Snow":
-    clouds.draw(color(cloudColor, 210));
-    snow.draw();
-    break;
-  case "Mist":
-    mist.draw();
-    textColor = #000000;
-    break;
-  case "Smoke":
-    smoke.draw();
-    textColor = #000000;
-    break;
-  case "Haze":
-    haze.draw();
-    textColor = #000000;
-    break;
-  case "Dust":
-    dust.draw();
-    textColor = #000000;
-    break;
-  case "Fog":
-    fog.draw();
-    textColor = #000000;
-    break;
-  case "Sand":
-    sand.draw();
-    textColor = #000000;
-    break;
-  case "Ash":
-    ash.draw();
-    textColor = #000000;
-    break;
-  case "Squall":
-    squall.draw();
-    break;
-  case "Tornado":
-    tornado.draw();
-    break;
-  default:
-    println("WARN: hit default on main weather switch!");
-    break;
-  }
+// DRAW WEATHER -----------------------------------------------------------------------------------
 
+  condition.draw();
   wind.draw();
+  clouds.draw();
 
+// DRAW TEXT --------------------------------------------------------------------------------------
   noStroke();
-
   fill(255, 255, 255);
-
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
   switch(weather.mainWeather) {
@@ -361,9 +317,6 @@ void displayText(int x, int y, color c) {
   // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
-      //fill(0);
-      //rect(i*3, - FONT_SIZE + 1.6, FONT_SIZE, FONT_SIZE - 0.2);
-      //fill(255);
       text(description.charAt(i), (float) i*3, 0);
     }
   }

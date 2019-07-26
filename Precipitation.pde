@@ -40,21 +40,21 @@ abstract class APrecipitation implements WeatherCondition {
 
 class Rain extends APrecipitation {
 
-  Rain() {
+  Rain(int intensity) {
     super(6);
   }
 }
 
 class Drizzle extends APrecipitation {
 
-  Drizzle() {
+  Drizzle(int intensity) {
     super(3);
   }
 }
 
 class Snow extends APrecipitation {
 
-  Snow() {
+  Snow(int intensity) {
     super(5);
   }
 
