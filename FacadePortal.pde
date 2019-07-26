@@ -135,6 +135,7 @@ void setup() {
 }
 
 void reset() {
+  weather = null;
   city++;
   textColor = #FF0000;
   if (city >= cities.length) {
@@ -146,7 +147,17 @@ void reset() {
   
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
-  weather = new Weather(json);
+  while (weather == null) {
+    try { 
+      weather = new Weather(json);
+    } catch (NullPointerException e) {
+      println("NPE for city " + cities[city]);
+      city++;
+        if (city >= cities.length) {
+          city = 0;
+        }
+    }
+  }
   wind = new Wind(weather.windSpeed);
   clouds = new Clouds(0);
   buildings = new Buildings(cityScapes.get(weather.city));
