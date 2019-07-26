@@ -114,7 +114,7 @@ void draw() {
     color c2 = #14246b;
     cloudColor = #DFDFDF;
     textColor = #FFFFFF;
-    setGradient(0, 0, width, height / 6, Y_AXIS, c1, c2);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
     for (PVector star : stars) {
       noStroke();
       fill(255, 170);
@@ -126,7 +126,7 @@ void draw() {
     color c2 = #8caecf;
     cloudColor = #DFDFDF;
     textColor = #000000;
-    setGradient(0, 0, width, height / 8, Y_AXIS, c1, c2);
+    setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
   } else {
     println("WARN: hit last else on sky fill!");
     background(0);
