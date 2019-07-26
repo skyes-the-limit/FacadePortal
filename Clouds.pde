@@ -6,6 +6,9 @@ class Clouds implements WeatherCondition {
   Clouds(int dens) {
     clouds = new ArrayList<Cloud>();
     density = dens;
+    if (density > 20) {
+     density = 20; 
+    }
     genClouds(true);
     tick = 0;
   }
@@ -24,7 +27,7 @@ class Clouds implements WeatherCondition {
       genRange = 0;
     }
     for (int i = 0; i < genNum; i++) {
-      this.clouds.add(new Cloud(new PVector(random(1, 2), 0), new PVector(random(genRange) - 200, random(height - 325))));
+      this.clouds.add(new Cloud(new PVector(random(1, 2), 0), new PVector(random(genRange) - 200, random(height - 360))));
     }
   }
 
@@ -70,7 +73,7 @@ class Cloud {
   // draws this drop
   void drawCloud() {
     noStroke();
-    fill(#FFFFFF); //color(#DFDFDF, 100)
+    fill(#FFFFFF, 190); //color(#DFDFDF, 100)
     ellipse(this.pos.x / aec.getScaleX(), this.pos.y / aec.getScaleY(), size, size);
   }
 }

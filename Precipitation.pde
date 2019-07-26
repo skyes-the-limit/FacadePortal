@@ -5,7 +5,7 @@ abstract class APrecipitation implements WeatherCondition {
 
   APrecipitation(int dens) {
     drops = new ArrayList<Drop>();
-    density = dens;
+    density = dens / 2;
   }
 
   // generates some number of drops (of the right type) to be drawn
@@ -41,21 +41,21 @@ abstract class APrecipitation implements WeatherCondition {
 class Rain extends APrecipitation {
 
   Rain(int intensity) {
-    super(6);
+    super(intensity);
   }
 }
 
 class Drizzle extends APrecipitation {
 
   Drizzle(int intensity) {
-    super(3);
+    super(round(intensity / 2));
   }
 }
 
 class Snow extends APrecipitation {
 
   Snow(int intensity) {
-    super(5);
+    super(intensity);
   }
 
   @Override

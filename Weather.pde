@@ -30,14 +30,97 @@ public class Weather {
   int parseDescription() {
     switch (mainWeather) {
       case "Clouds":
+        switch (description) {
+          case "few clouds: 11-25%":
+            return 5;
+          case "scattered clouds: 25-50%":
+            return 12;
+          case "broken clouds: 51-84%":
+            return 25;
+          case "overcast clouds: 85-100%":
+            return 40;
+          default:
+            return 10;
+        }
       case "Drizzle":
+        switch (description) {
+          case "light intensity drizzle":
+            return 5;
+          case "drizzle":
+          case "light intensity drizzle rain":
+            return 12;
+          case "heavy intensity drizzle":
+          case "drizzle rain":
+          case "shower drizzle":
+            return 25;
+          case "heavy intensity drizzle rain":
+          case "shower rain and drizzle":
+            return 40;
+          case "heavy shower rain and drizzle":
+            return 60;
+          default:
+            return 12;
+        }
       case "Rain":
+        switch (description) {
+          case "light rain":
+          case "light intensity shower rain":
+            return 5;
+          case "moderate rain":
+          case "freezing rain":
+          case "shower rain":
+          case "ragged shower rain":
+            return 12;
+          case "heavy intensity rain":
+          case "heavy intensity shower rain":
+            return 25;
+          case "very heavy rain":
+            return 40;
+          case "extreme rain":
+            return 60;
+          default:
+            return 12;
+        }
       case "Snow":
+        switch (description) {
+          case "light snow":
+          case "Light shower sleet":
+          case "Light rain and snow":
+          case "Light shower snow":
+            return 5;
+          case "Snow":
+          case "Sleet":
+          case "Shower sleet":
+          case "Rain and snow":
+          case "Shower snow":
+            return 12;
+          case "Heavy snow":
+          case "Heavy shower snow":
+            return 25;
+          default:
+            return 12;
+        }
       case "Thunderstorm":
+        switch (description) {
+          case "thunderstorm with light rain":
+          case "light thunderstorm":
+          case "thunderstorm with light drizzle":
+          case "thunderstorm with drizzle":
+          case "thunderstorm with heavy drizzle":
+            return 5;
+          case "thunderstorm with rain":
+          case "thunderstorm":
+          case "ragged thunderstorm":
+            return 12;
+          case "thunderstorm with heavy rain":
+          case "heavy thunderstorm":
+            return 25;
+          default:
+            return 10;
+        }
       default:
-      
+        return 0;
     }
-    return 0;
   }
 }
 
@@ -58,4 +141,9 @@ public class Weather {
 
 interface WeatherCondition {
   void draw();
+}
+
+class Clear implements WeatherCondition {
+  void draw() {
+  }
 }

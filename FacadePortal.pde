@@ -1,7 +1,7 @@
 /*
 Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
  Creative Coding - Summer 2 2019
- 
+
  REFERENCES:
  https://openweathermap.org/weather-conditions
  https://openweathermap.org/current#current_JSON
@@ -51,9 +51,9 @@ String description = "";
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
@@ -65,18 +65,20 @@ color textColor = #FF0000;
 
 void setup() {
   // BASIC SETUP
+  if (start) {
+    Collections.shuffle(Arrays.asList(cities));
+  }
   colorMode(RGB);
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
   aec = new AEC();
+  aec.init();
+  start = false;
 
   // POPULATE STARS, GERMAN, & CITYSCAPES ------------------------------------------------
-  for (int i = 0; i <= 65; i++) {
+  for (int i = 0; i <= 45; i++) {
     stars.add(new PVector(random(width / 4), random(height / 12)));
-  }
-  if (start) {
-    Collections.shuffle(Arrays.asList(cities));
   }
   german.put("Tokyo", "Tokio");
   german.put("Beijing", "Peking");
@@ -137,10 +139,10 @@ void setup() {
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
+  wind = new Wind(weather.windSpeed);
+  clouds = new Clouds(0);
+  buildings = new Buildings(cityScapes.get(weather.city));
 
-  int intensity = weather.intensity;
-  WeatherCondition condition = null;
-  Clouds clouds = new Clouds(0);
   switch (weather.mainWeather) {
   case "Clouds":
     clouds = new Clouds(weather.intensity);
@@ -201,27 +203,12 @@ void setup() {
     println("WARN: hit default on main weather switch!");
     break;
   }
-
-  clouds = new Clouds(intensity);
-  wind = new Wind(weather.windSpeed);
-  buildings = new Buildings(cityScapes.get(weather.city));
-
-  // START AEC
-  aec.init();
-  start = false;
 }
 
 void draw() {
   aec.beginDraw();
 
-  color cloudColor = #FFFFFF;
-
-  //weather.mainWeather = "Mist";
-  weather.mainWeather = "Clouds";
-  weather.description = "overcast clouds: 85-100%";
-
-  // DRAW BACKGROUND --------------------------------------------------------------------
-
+// DRAW BACKGROUND --------------------------------------------------------------------
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -241,18 +228,13 @@ void draw() {
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
-    if (textColor == #FF0000) {
-      textColor = #FFFFFF;
-    }
+    textColor = #FFFFFF;
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
   } else if (now < weather.sunrise || now > weather.sunset) {
-    //NIGHT
+    // NIGHT
     color c1 = #001639;
     color c2 = #1F007A;
-    cloudColor = #DFDFDF;
-    if (textColor == #FF0000) {
-      textColor = #FFFFFF;
-    }
+    textColor = #FFFFFF;
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
     for (int i = 0; i < stars.size(); i++) {
       PVector star = stars.get(i);
@@ -263,18 +245,16 @@ void draw() {
     }
   } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
-    if (weather.intensity >= 40) {
+    if (weather.intensity >= 40) { // OVERCAST / HEAVY CLOUDS
       color c1 = #9BBED7;
       color c2 = #DCDCDC;
-      cloudColor = #DFDFDF;
       if (textColor == #FF0000) {
         textColor = #000000;
       }
       setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
-    } else {
+    } else { // CLEAR
       color c1 = #0082DB;
       color c2 = #ADDEFF;
-      cloudColor = #DFDFDF;
       if (textColor == #FF0000) {
         textColor = #000000;
       }
@@ -291,7 +271,7 @@ void draw() {
   // DRAW WEATHER -----------------------------------------------------------------------------------
 
   condition.draw();
-  buildings.draw();
+  //buildings.draw();
   wind.draw();
   clouds.draw();
 
@@ -300,51 +280,31 @@ void draw() {
   fill(255, 255, 255);
   float frameInterval = 2.5;
   // determines the speed (number of frames between text movements)
-  switch(weather.mainWeather) {
-  case "Mist":
-  case "Smoke":
-  case "Haze":
-  case "Dust":
-  case "Fog":
-  case "Sand":
-  case "Ash":
+  if (Arrays.asList("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Ash").contains(weather.mainWeather)) {
     frameInterval = 0.5;
-    break;
   }
 
-  // min and max grid positions at which the text origin should be. we scroll from max (+, right side) to min (-, left side)
   int minPos = -200;
   int maxPos = 45;
   int loopFrames = round((maxPos - minPos) * frameInterval) + 20;
-
-  // vertical grid pos
   int yPos = 15;
-
   int xPos = max(minPos, maxPos - round((frameCount % loopFrames) / frameInterval));
   displayText(xPos, yPos, textColor);
 
   aec.endDraw();
   aec.drawSides();
 
+// TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
   if (xPos <= minPos + 10) {
-    city++;
-    if (city >= cities.length) {
-      city = 0;
-    }
-    setup();
-    frameCount = 0;
+    reset();
   }
 }
 
 void displayText(int x, int y, color c) {
   noStroke();
   fill(c);
-
-  // push & translate to the text origin
   pushMatrix();
   translate(x, y + FONT_OFFSET_Y);
-
-  // scale the font up by fixed paramteres so it fits our grid
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
   textSize(FONT_SIZE);
@@ -354,8 +314,6 @@ void displayText(int x, int y, color c) {
     city = weather.city;
   }
   description = city + " " + convertTemp(weather.temp);
-
-  // draw the font glyph by glyph, because the default kerning doesn't align with our grid
   for (int i = 0; i < description.length(); i++) {
     if (i < description.length()) {
       text(description.charAt(i), (float) i*3, 0);
@@ -367,4 +325,60 @@ void displayText(int x, int y, color c) {
 
 void keyPressed() {
   aec.keyPressed(key);
+  switch (key) {
+    case 'r':
+     reset();
+     break;
+  }
+}
+
+void reset() {
+  city++;
+  if (city >= cities.length) {
+    city = 0;
+  }
+  setup();
+  frameCount = 0;
+}
+
+import java.util.Date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+
+int Y_AXIS = 1;
+int X_AXIS = 2;
+
+void setGradient(int x, int y, float w, float h, int axis, color ... colors) {
+
+  noFill();
+  int div = colors.length - 1;
+  if (axis == Y_AXIS) {  // Top to bottom gradient
+    for (int j = 0; j + 1 < colors.length; j++) {
+      for (float i = y + (j*h)/div; i <= y + (j+1)*h/div; i++) {
+        float inter = map(i, y + (j*h)/div, y + (j+1)*h/div, 0, 1);
+        color c = lerpColor(colors[j], colors[j+1], inter);
+        stroke(c);
+        line(x, i, x+w, i);
+      }
+    }
+  } else if (axis == X_AXIS) {  // Left to right gradient
+    for (int j = 0; j + 1 < colors.length; j++) {
+      for (float i = x + (j*w/div); i <= x+(j+1)*w/div; i++) {
+        float inter = map(i, x + (j*w/div), x+(j+1)*w/div, 0, 1);
+        color c = lerpColor(colors[j], colors[j+1], inter);
+        stroke(c);
+        line(i, y, i, y+h);
+      }
+    }
+  }
+}
+
+String convertTime(long time) {
+  Date date = new Date(time);
+  Format format = new SimpleDateFormat("HH:mm");
+  return format.format(date);
+}
+
+String convertTemp(double temp) {
+  return (int) (temp - 273.15) + "°C";
 }
