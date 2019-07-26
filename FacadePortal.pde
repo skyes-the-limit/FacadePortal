@@ -353,10 +353,6 @@ void keyPressed() {
   }
 }
 
-import java.util.Date;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-
 int Y_AXIS = 1;
 int X_AXIS = 2;
 
