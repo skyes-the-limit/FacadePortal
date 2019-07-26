@@ -125,9 +125,9 @@ class SnowDrop extends ADrop implements Drop {
   final float[] bounds = new float[2];
 
   SnowDrop() {
-    super( new PVector(0, random(1, 2)), new PVector(0.3, random(2, 3)), new PVector(random(width), 0), color(random(210, 230), 227, 229));
-    bounds[0] = pos.x - 1;
-    bounds[1] = pos.x + 1;
+    super( new PVector(0, random(0, 1)), new PVector(1, random(1, 2)), new PVector(random(width), 0), color(random(210, 230), 227, 229));
+    bounds[0] = pos.x - 3;
+    bounds[1] = pos.x + 3;
   }
 
   @Override

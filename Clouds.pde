@@ -15,14 +15,14 @@ class Clouds {
     if (start) {
       genNum = density;
     } else {
-      if (tick % 35 == 0) {
+      if (tick % 50 == 0) {
         genNum = round(density * 0.5);
       } else {
         genNum = 0;
       }
     }
     for (int i = 0; i < genNum; i++) {
-      this.clouds.add(new Cloud(new PVector(random(1, 5), 0), new PVector(random(width - 400) - 200, random(height - 200))));
+      this.clouds.add(new Cloud(new PVector(random(1, 2), 0), new PVector(random(width - 400) - 200, random(height - 200))));
     }
   }
 
@@ -50,7 +50,7 @@ class Clouds {
 class Cloud {
   PVector vel;
   PVector pos;
-  int size = 10;
+  int size = 6;
 
   Cloud(PVector vel, PVector pos) {
     this.vel = vel;
