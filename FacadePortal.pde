@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 2700;
 AEC aec;
@@ -68,6 +68,7 @@ void setup() {
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
+  textColor = #FF0000;
   aec = new AEC();
   aec.init();
 
@@ -135,6 +136,7 @@ void setup() {
 
 void reset() {
   city++;
+  textColor = #FF0000;
   if (city >= cities.length) {
     city = 0;
   }
@@ -258,9 +260,7 @@ void draw() {
     if (weather.intensity >= 40) { // OVERCAST / HEAVY CLOUDS
       color c1 = #9BBED7;
       color c2 = #DCDCDC;
-      if (textColor == #FF0000) {
-        textColor = #000000;
-      }
+      textColor = #000000;
       setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
     } else { // CLEAR
       color c1 = #0082DB;
@@ -312,8 +312,8 @@ void draw() {
 
 void displayText(int x, int y, color c) {
   noStroke();
-  fill(c);
   pushMatrix();
+  fill(c);
   translate(x, y + FONT_OFFSET_Y);
   scale(FONT_SCALE_X, FONT_SCALE_Y);
   textFont(font);
