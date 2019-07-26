@@ -60,22 +60,16 @@ String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle",
 HashMap<String, String> german = new HashMap();
 HashMap<String, int[]> cityScapes = new HashMap();
 
-boolean start = true;
-
 color textColor = #FF0000;
 
 void setup() {
-  // BASIC SETUP
-  if (start) {
-    Collections.shuffle(Arrays.asList(cities));
-  }
+  Collections.shuffle(Arrays.asList(cities));
   colorMode(RGB);
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
   aec = new AEC();
   aec.init();
-  start = false;
 
   // POPULATE STARS, GERMAN, & CITYSCAPES ------------------------------------------------
   for (int i = 0; i <= 45; i++) {
@@ -135,8 +129,19 @@ void setup() {
   cityScapes.put("Jakarta", new int[]{ Buildings.LOW_DENS, Buildings.HIGH_HEIGHT});
   cityScapes.put("Auckland", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
   cityScapes.put("Dallas", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  
+  reset();
+}
 
-
+void reset() {
+  city++;
+  if (city >= cities.length) {
+    city = 0;
+  }
+  frameCount = 0;
+  aec = new AEC();
+  aec.init();
+  
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
@@ -331,15 +336,6 @@ void keyPressed() {
     reset();
     break;
   }
-}
-
-void reset() {
-  city++;
-  if (city >= cities.length) {
-    city = 0;
-  }
-  setup();
-  frameCount = 0;
 }
 
 import java.util.Date;
