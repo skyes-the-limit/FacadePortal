@@ -18,7 +18,7 @@ class Thunderstorm implements WeatherCondition {
 
   void draw() {
     this.precipitation.draw();
-    if (frameCount % 25 == 0) {
+    if (frameCount % 12 == 0) {
       flash = true;
     }
     if (flash) {
@@ -29,12 +29,12 @@ class Thunderstorm implements WeatherCondition {
   void drawFlash() {
     fill(255, map(count, 0, 30, 0, 100));
     rect(0, 0, width, height);
-    if (count > max) {
-      isDec = true;
-    } else if (count < 25 && isDec && stutter) {
+    if (count < 25 && isDec && stutter) {
       isDec = false;
       stutter = false;
       max = 120;
+    } else if (count > max) {
+      isDec = true;
     } else if (count < 0) {
       flash = false;
       isDec = false;

@@ -1,11 +1,11 @@
 /*
-Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
-Creative Coding - Summer 2 2019
-
-REFERENCES:
-  https://openweathermap.org/weather-conditions
-  https://openweathermap.org/current#current_JSON
-*/
+ Arielle Bishop, Kriti Gurubacharya, Maggie Van Nortwick
+ Creative Coding - Summer 2 2019
+ 
+ REFERENCES:
+ https://openweathermap.org/weather-conditions
+ https://openweathermap.org/current#current_JSON
+ */
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 static final String BASE_API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-static final String API_KEY = "b9d91e04a7fe80306b4f7419d9602c26";//System.getenv("OPEN_WEATHER_MAP");
+static final String API_KEY = System.getenv("OPEN_WEATHER_MAP");
 static final int WIND_THRESHOLD = 30;
 static final int SUN_THRESHOLD = 2700;
 AEC aec;
@@ -52,32 +52,26 @@ String description = "";
 
 int city = 0;
 
-String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva",
-  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul",
-  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh",
+String[] cities = new String[]{"London", "Paris", "Tokyo", "Beijing", "Seattle", "Rio de Janeiro", "Geneva", 
+  "Boston", "Sydney", "Buenos Aires", "Helsinki", "Barcelona", "Toronto", "Mexico City", "Dubai", "Moscow", "Istanbul", 
+  "Mumbai", "New Delhi", "Kathmandu", "Bangkok", "Santiago", "Lima", "Panama City", "Reykjavik", "Athens", "Marrakesh", 
   "Cape Town", "Tel Aviv", "Cairo", "Nairobi", "Seoul", "Shanghai", "Lagos", "Anchorage", "Hong Kong", "Jakarta", "Auckland", "Dallas"};
 
 HashMap<String, String> german = new HashMap();
-HashMap<String, String> skyscrapers = new HashMap();
-
-boolean start = true;
+HashMap<String, int[]> cityScapes = new HashMap();
 
 color textColor = #FF0000;
 
 void setup() {
-  // BASIC SETUP
-  if (start) {
-    Collections.shuffle(Arrays.asList(cities));
-  }
+  Collections.shuffle(Arrays.asList(cities));
   colorMode(RGB);
   frameRate(25);
   size(1200, 400);
   font = createFont("FreePixel.ttf", 10, false);
   aec = new AEC();
   aec.init();
-  start = false;
 
-  // POPULATE STARS, GERMAN, & SKYSCRAPERS ------------------------------------------------
+  // POPULATE STARS, GERMAN, & CITYSCAPES ------------------------------------------------
   for (int i = 0; i <= 45; i++) {
     stars.add(new PVector(random(width / 4), random(height / 12)));
   }
@@ -96,13 +90,64 @@ void setup() {
   german.put("Cairo", "Kairo");
   german.put("Hong Kong", "Hongkong");
 
-  //skyscrapers.put("Tokyo,
+  cityScapes.put("London", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT} );
+  cityScapes.put("Paris", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Tokyo", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT} );
+  cityScapes.put("Beijing", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Seattle", new int[]{ Buildings.MED_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Rio de Janeiro", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Geneva", new int[]{ Buildings.MED_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Boston", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Sydney", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Buenos Aires", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Helsinki", new int[]{ Buildings.MED_DENS, Buildings.LOW_HEIGHT});
+  cityScapes.put("Barcelona", new int[]{ Buildings.MED_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Toronto", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Mexico City", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Dubai", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Moscow", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Istanbul", new int[]{ Buildings.HIGH_DENS, Buildings.LOW_HEIGHT});
+  cityScapes.put("Mumbai", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("New Delhi", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Kathmandu", new int[]{ Buildings.LOW_DENS, Buildings.LOW_HEIGHT});
+  cityScapes.put("Bangkok", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Santiago", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Lima", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Panama City", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Reykjavik", new int[]{ Buildings.LOW_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Athens", new int[]{ Buildings.MED_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Marrakesh", new int[]{ Buildings.MED_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Cape Town", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Tel Aviv", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Cairo", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Nairobi", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Seoul", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Shanghai", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Lagos", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Anchorage", new int[]{ Buildings.LOW_DENS, Buildings.LOW_HEIGHT});
+  cityScapes.put("Hong Kong", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Jakarta", new int[]{ Buildings.LOW_DENS, Buildings.HIGH_HEIGHT});
+  cityScapes.put("Auckland", new int[]{ Buildings.HIGH_DENS, Buildings.MED_HEIGHT});
+  cityScapes.put("Dallas", new int[]{ Buildings.HIGH_DENS, Buildings.HIGH_HEIGHT});
+  
+  reset();
+}
 
+void reset() {
+  city++;
+  if (city >= cities.length) {
+    city = 0;
+  }
+  frameCount = 0;
+  aec = new AEC();
+  aec.init();
+  
   // LOAD WEATHER CONDITION FOR CITY -------------------------------------------------------
   JSONObject json = loadJSONObject(BASE_API_URL + cities[city] + "&APPID=" + API_KEY);
   weather = new Weather(json);
   wind = new Wind(weather.windSpeed);
   clouds = new Clouds(0);
+  buildings = new Buildings(cityScapes.get(weather.city));
 
   switch (weather.mainWeather) {
   case "Clouds":
@@ -169,7 +214,7 @@ void setup() {
 void draw() {
   aec.beginDraw();
 
-// DRAW BACKGROUND --------------------------------------------------------------------
+  // DRAW BACKGROUND --------------------------------------------------------------------
   long now = Instant.now().getEpochSecond();
   if (abs(now - weather.sunrise) < SUN_THRESHOLD) {
     //SUNRISE
@@ -183,19 +228,23 @@ void draw() {
       textColor = #000000;
     }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4, c5, c6);
-  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) { 
+  } else if (abs(now - weather.sunset) < SUN_THRESHOLD) {
     // SUNSET
     color c1 = color(34, 1, 78);
     color c2 = color(105, 5, 91);
     color c3 = color(142, 12, 19);
     color c4 = color(182, 75, 1);
-    textColor = #FFFFFF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2, c3, c4);
-  } else if (now < weather.sunrise || now > weather.sunset) { 
+  } else if (now < weather.sunrise || now > weather.sunset) {
     // NIGHT
     color c1 = #001639;
     color c2 = #1F007A;
-    textColor = #FFFFFF;
+    if (textColor == #FF0000) {
+      textColor = #FFFFFF;
+    }
     setGradient(0, 0, width, height / 12, Y_AXIS, c1, c2);
     for (int i = 0; i < stars.size(); i++) {
       PVector star = stars.get(i);
@@ -204,7 +253,7 @@ void draw() {
       fill(255, alpha);
       rect(star.x, star.y, 0.7, 1);
     }
-  } else if (now > weather.sunrise && now < weather.sunset) { 
+  } else if (now > weather.sunrise && now < weather.sunset) {
     // DAY
     if (weather.intensity >= 40) { // OVERCAST / HEAVY CLOUDS
       color c1 = #9BBED7;
@@ -229,13 +278,14 @@ void draw() {
     }
   }
 
-// DRAW WEATHER -----------------------------------------------------------------------------------
+  // DRAW WEATHER -----------------------------------------------------------------------------------
+
+  buildings.draw();
   condition.draw();
-  //buildings.draw();
   wind.draw();
   clouds.draw();
 
-// DRAW TEXT --------------------------------------------------------------------------------------
+  // DRAW TEXT --------------------------------------------------------------------------------------
   noStroke();
   fill(255, 255, 255);
   float frameInterval = 2.5;
@@ -254,7 +304,7 @@ void draw() {
   aec.endDraw();
   aec.drawSides();
 
-// TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
+  // TRIGGER NEW CITY LOOP ---------------------------------------------------------------------------
   if (xPos <= minPos + 10) {
     reset();
   }
@@ -286,19 +336,10 @@ void displayText(int x, int y, color c) {
 void keyPressed() {
   aec.keyPressed(key);
   switch (key) {
-    case 'r':
-     reset();
-     break;
+  case 'r':
+    reset();
+    break;
   }
-}
-
-void reset() {
-  city++;
-  if (city >= cities.length) {
-    city = 0;
-  }
-  setup();
-  frameCount = 0;
 }
 
 import java.util.Date;
